@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Stack",
+  "name": "Stack game in WebGL",
   "icons": [
     {
       "src": "favicon.ico",
