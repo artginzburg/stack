@@ -1,6 +1,3 @@
-import { Vector2, Vector3 } from 'three';
+import type { TileProps } from './Tile';
 
-export type PreviousTile = {
-  center: Vector3;
-  size: Vector2;
-};
+export type PreviousTile = Pick<TileProps, 'position' | 'size'>;

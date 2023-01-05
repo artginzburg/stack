@@ -1,6 +1,6 @@
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 
 import { FadingTile } from '../classes/FadingTile';
@@ -17,15 +17,20 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
   const [score, setScore] = useState('0');
   const [index, setIndex] = useState(0);
-  const [previousTile, setPreviousTile] = useState({
-    size: new Vector2(100, 100),
-    center: new Vector3(0, 0, 0),
-  });
+  const defaultPreviousTile: Pick<TileProps, 'position' | 'size'> = useMemo(
+    () => ({
+      size: new Vector2(100, 100),
+      position: new Vector3(),
+    }),
+    [],
+  );
   const [staticTiles, setStaticTiles] = useState<TileProps[]>([]);
   const [cubes, setCubes] = useState<FadingTile[]>([]);
   const [effects, setEffects] = useState<PerfectEffectProps[]>([]);
 
   const movingTileMeshRef = useRef<Mesh>(null);
+
+  const previousTile = staticTiles.at(-1) ?? defaultPreviousTile;
 
   function cutBox() {
     if (!movingTileMeshRef.current) return;
@@ -37,7 +42,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     currentTile.getCenter(currentCenter);
 
     // get vectors difference
-    const diff = currentCenter.clone().sub(previousTile.center);
+    const diff = currentCenter.clone().sub(previousTile.position);
 
     const absDiffX = Math.abs(diff.x);
     const absDiffZ = Math.abs(diff.z);
@@ -63,18 +68,18 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
       newSize.x += absDiffX;
       newSize.y += absDiffZ;
 
-      spawnEffect(previousTile.center, previousTile.size);
+      spawnEffect(previousTile.position, previousTile.size);
     } else {
       const cutSizeX = previousTile.size.x - newSize.x;
       const cutSizeZ = previousTile.size.y - newSize.y;
 
-      const signX = currentCenter.x - previousTile.center.x < 0 ? -1 : 1;
-      const signZ = currentCenter.z - previousTile.center.y < 0 ? -1 : 1;
+      const signX = currentCenter.x - previousTile.position.x < 0 ? -1 : 1;
+      const signZ = currentCenter.z - previousTile.position.y < 0 ? -1 : 1;
 
       const position = new Vector3(
-        cutSizeX ? currentCenter.x + (signX * newSize.x) / 2 : previousTile.center.x,
-        previousTile.center.y + 10,
-        cutSizeZ ? currentCenter.z + (signZ * newSize.y) / 2 : previousTile.center.z,
+        cutSizeX ? currentCenter.x + (signX * newSize.x) / 2 : previousTile.position.x,
+        previousTile.position.y + 10,
+        cutSizeZ ? currentCenter.z + (signZ * newSize.y) / 2 : previousTile.position.z,
       );
 
       const cutTile = new FadingTile(
@@ -87,9 +92,9 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     }
 
     const newCenter = new Vector3(
-      previousTile.center.x + diff.x / 2,
-      previousTile.center.y + 10,
-      previousTile.center.z + diff.z / 2,
+      previousTile.position.x + diff.x / 2,
+      previousTile.position.y + 10,
+      previousTile.position.z + diff.z / 2,
     );
 
     setStaticTiles((prev) => [
@@ -100,11 +105,6 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         index,
       },
     ]);
-
-    setPreviousTile({
-      center: newCenter,
-      size: newSize,
-    });
 
     setScore(String(index + 1));
   }
@@ -128,10 +128,6 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     setIndex(-1);
     setCubes([]);
     setStaticTiles([]);
-    setPreviousTile({
-      center: new Vector3(0, 0, 0),
-      size: new Vector2(100, 100),
-    });
     setScore(String(0));
   }
 
@@ -192,7 +188,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
           <primitive key={tile.mesh.id} object={tile.mesh} />
         ))}
         <PerfectEffects effects={effects} setEffects={setEffects} />
-        {debug && <OrbitControls target={previousTile.center} />}
+        {debug && <OrbitControls target={previousTile.position} />}
       </Canvas>
     </div>
   );

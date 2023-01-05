@@ -50,8 +50,8 @@ export function MovingTile({
         }
       } else {
         if (
-          Math.round(mesh.position.x) === Math.round(previousTile.center.x) &&
-          Math.round(mesh.position.z) === Math.round(previousTile.center.z)
+          Math.round(mesh.position.x) === Math.round(previousTile.position.x) &&
+          Math.round(mesh.position.z) === Math.round(previousTile.position.z)
         ) {
           document.getElementsByTagName('canvas')[0].click();
         }
@@ -78,8 +78,8 @@ export function MovingTile({
     mesh.geometry.dispose();
     const geometry = new BoxGeometry(previousTile.size.x, height, previousTile.size.y);
     mesh.geometry = geometry;
-    mesh.position.x = previousTile.center.x;
-    mesh.position.z = previousTile.center.z;
+    mesh.position.x = previousTile.position.x;
+    mesh.position.z = previousTile.position.z;
     // End Resize.
 
     mesh.position.y = index * height;
@@ -92,8 +92,8 @@ export function MovingTile({
   }, [
     index,
     movingTileMeshRef,
-    previousTile.center.x,
-    previousTile.center.z,
+    previousTile.position.x,
+    previousTile.position.z,
     previousTile.size.x,
     previousTile.size.y,
     startOffset,

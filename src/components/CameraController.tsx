@@ -1,7 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useState } from 'react';
 import { Vector3 } from 'three';
-import { PreviousTile } from './types';
+import type { PreviousTile } from './types';
 
 export function CameraController({ previousTile }: { previousTile: PreviousTile }) {
   // const [point, setPoint] = useState(new Vector3());
@@ -27,12 +27,12 @@ export function CameraController({ previousTile }: { previousTile: PreviousTile 
   });
 
   useEffect(() => {
-    const newPoint = new Vector3(0, previousTile.center.y, 0);
+    const newPoint = new Vector3(0, previousTile.position.y, 0);
     // setPoint(newPoint);
     setTimer(0);
     setStart(camera.position.clone());
     setDestination(newPoint.clone().add(offset));
-  }, [camera, offset, previousTile.center.y]);
+  }, [camera, offset, previousTile.position.y]);
 
   useFrame((state, delta) => {
     const ease = (t: number) => t * t * (3.0 - 2.0 * t);
