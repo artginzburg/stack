@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 
 import { FadingTile } from '../classes/FadingTile';
-import { PerfectEffect } from '../classes/PerfectEffect';
+import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
 import { Tile } from '../classes/Tile';
 import { BaseTile } from './BaseTile';
 import { CameraController } from './CameraController';
@@ -22,7 +22,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     center: new Vector3(0, 0, 0),
   });
   const [cubes, setCubes] = useState<(Tile | FadingTile)[]>([]);
-  const [effects, setEffects] = useState<PerfectEffect[]>([]);
+  const [effects, setEffects] = useState<PerfectEffectProps[]>([]);
 
   const movingTileMeshRef = useRef<Mesh>(null);
 
@@ -108,12 +108,14 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   }
 
   function spawnEffect(position: Vector3, size: Vector2) {
-    const plane = new PerfectEffect(position, size, () => {
-      const newEffects = [...effects];
-      newEffects.splice(newEffects.indexOf(plane, 1));
-      setEffects(newEffects);
-    });
-    setEffects([...effects, plane]);
+    setEffects((prev) => [
+      ...prev,
+      {
+        position,
+        size,
+        materialOpacity: 1,
+      },
+    ]);
   }
 
   function reset() {
@@ -164,7 +166,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         shadows="basic"
       >
         <CameraController previousTile={previousTile} />
-        <FrameController cubes={cubes} effects={effects} />
+        <FrameController cubes={cubes} />
         <ambientLight color="#ccc" intensity={0.4} />
         <DirLight />
         <BaseTile />
@@ -179,9 +181,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         {cubes.map((tile) => (
           <primitive key={tile.mesh.id} object={tile.mesh} />
         ))}
-        {effects.map((plane) => (
-          <primitive key={plane.mesh.id} object={plane.mesh} />
-        ))}
+        <PerfectEffects effects={effects} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.center} />}
       </Canvas>
     </div>
