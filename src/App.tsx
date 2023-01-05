@@ -1,8 +1,17 @@
 // import './App.css';
+import { useState } from 'react';
+import { useEventListener } from 'usehooks-ts';
 import { Game } from './components/Game';
 
 function App() {
-  return <Game />;
+  const [autoplay, setAutoplay] = useState(false);
+
+  return (
+    <>
+      {process.env.NODE_ENV !== 'production' && <DevOnlyFeatures setAutoplay={setAutoplay} />}
+      <Game autoplay={autoplay} />
+    </>
+  );
   // return (
   //   <div className="App">
   //     <header className="App-header">
@@ -21,6 +30,20 @@ function App() {
   //     </header>
   //   </div>
   // );
+}
+
+function DevOnlyFeatures({
+  setAutoplay,
+}: {
+  setAutoplay: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  useEventListener('keydown', (event) => {
+    if (event.code === 'KeyA') {
+      setAutoplay((prev) => !prev);
+    }
+  });
+
+  return null;
 }
 
 export default App;
