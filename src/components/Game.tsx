@@ -3,14 +3,13 @@ import { Canvas } from '@react-three/fiber';
 import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 
-import { FadingTile } from '../classes/FadingTile';
 import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
 import { BaseTile } from './BaseTile';
 import { CameraController } from './CameraController';
 import { DirLight } from './DirLight';
-import { FrameController } from './FrameController';
 import { MovingTile } from './MovingTile';
 import { ReactTile, TileProps } from './Tile';
+import { FadingTileProps, FadingTiles } from './FadingTile';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
@@ -25,7 +24,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     [],
   );
   const [staticTiles, setStaticTiles] = useState<TileProps[]>([]);
-  const [cubes, setCubes] = useState<FadingTile[]>([]);
+  const [fadingTiles, setFadingTiles] = useState<FadingTileProps[]>([]);
   const [effects, setEffects] = useState<PerfectEffectProps[]>([]);
 
   const movingTileMeshRef = useRef<Mesh>(null);
@@ -82,13 +81,17 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         cutSizeZ ? currentCenter.z + (signZ * newSize.y) / 2 : previousTile.position.z,
       );
 
-      const cutTile = new FadingTile(
-        position,
-        new Vector2(cutSizeX || previousTile.size.x, cutSizeZ || previousTile.size.y),
-        index,
-      );
-
-      setCubes((prev) => [...prev, cutTile]);
+      setFadingTiles((prev) => [
+        ...prev,
+        // Cut tile
+        {
+          position,
+          size: new Vector2(cutSizeX || previousTile.size.x, cutSizeZ || previousTile.size.y),
+          index,
+          materialOpacity: 1,
+          timer: 0,
+        },
+      ]);
     }
 
     const newCenter = new Vector3(
@@ -126,7 +129,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
   function reset() {
     setIndex(-1);
-    setCubes([]);
+    setFadingTiles([]);
     setStaticTiles([]);
     setScore(String(0));
   }
@@ -169,7 +172,6 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         shadows="basic"
       >
         <CameraController previousTile={previousTile} />
-        <FrameController cubes={cubes} />
         <ambientLight color="#ccc" intensity={0.4} />
         <DirLight />
         <BaseTile />
@@ -184,9 +186,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         {staticTiles.map((tile) => (
           <ReactTile key={tile.index} {...tile} />
         ))}
-        {cubes.map((tile) => (
-          <primitive key={tile.mesh.id} object={tile.mesh} />
-        ))}
+        <FadingTiles fadingTiles={fadingTiles} setFadingTiles={setFadingTiles} />
         <PerfectEffects effects={effects} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
       </Canvas>
