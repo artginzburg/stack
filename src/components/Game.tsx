@@ -5,12 +5,12 @@ import { Box3, Mesh, Vector2, Vector3 } from 'three';
 
 import { FadingTile } from '../classes/FadingTile';
 import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
-import { Tile } from '../classes/Tile';
 import { BaseTile } from './BaseTile';
 import { CameraController } from './CameraController';
 import { DirLight } from './DirLight';
 import { FrameController } from './FrameController';
 import { MovingTile } from './MovingTile';
+import { ReactTile, TileProps } from './Tile';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
@@ -21,7 +21,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     size: new Vector2(100, 100),
     center: new Vector3(0, 0, 0),
   });
-  const [cubes, setCubes] = useState<(Tile | FadingTile)[]>([]);
+  const [staticTiles, setStaticTiles] = useState<TileProps[]>([]);
+  const [cubes, setCubes] = useState<FadingTile[]>([]);
   const [effects, setEffects] = useState<PerfectEffectProps[]>([]);
 
   const movingTileMeshRef = useRef<Mesh>(null);
@@ -91,9 +92,14 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
       previousTile.center.z + diff.z / 2,
     );
 
-    const newTile = new Tile(newCenter, newSize, index);
-
-    setCubes((prev) => [...prev, newTile]);
+    setStaticTiles((prev) => [
+      ...prev,
+      {
+        position: newCenter,
+        size: newSize,
+        index,
+      },
+    ]);
 
     setPreviousTile({
       center: newCenter,
@@ -121,6 +127,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   function reset() {
     setIndex(-1);
     setCubes([]);
+    setStaticTiles([]);
     setPreviousTile({
       center: new Vector3(0, 0, 0),
       size: new Vector2(100, 100),
@@ -176,8 +183,11 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
           movingTileMeshRef={movingTileMeshRef}
           previousTile={previousTile}
           autoplay={autoplay}
-          lastCube={cubes.at(-1)}
+          lastCube={staticTiles.at(-1)}
         />
+        {staticTiles.map((tile) => (
+          <ReactTile key={tile.index} {...tile} />
+        ))}
         {cubes.map((tile) => (
           <primitive key={tile.mesh.id} object={tile.mesh} />
         ))}

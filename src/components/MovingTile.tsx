@@ -2,7 +2,7 @@ import { useFrame } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import { BoxGeometry, Mesh, Vector2Tuple, Vector3 } from 'three';
 
-import type { Tile } from '../classes/Tile';
+import type { TileProps } from './Tile';
 import type { PreviousTile } from './types';
 
 export function MovingTile({
@@ -18,7 +18,7 @@ export function MovingTile({
   movingTileMeshRef: React.RefObject<Mesh>;
   previousTile: PreviousTile;
   autoplay: boolean | undefined;
-  lastCube: Tile | undefined;
+  lastCube: TileProps | undefined;
 }) {
   const height = 10;
   const startOffset = 100;
@@ -44,11 +44,7 @@ export function MovingTile({
         const autoplayEpsilon = Math.round(addedPosition) / 2 + 0.1;
 
         if (
-          nearlyEqual(
-            lastCube.mesh.position[axis],
-            mesh.position[axis],
-            autoplayEpsilon + autoplayError,
-          )
+          nearlyEqual(lastCube.position[axis], mesh.position[axis], autoplayEpsilon + autoplayError)
         ) {
           document.getElementsByTagName('canvas')[0].click();
         }
