@@ -12,11 +12,11 @@ import { ReactTile, TileProps } from './Tile';
 import { FadingTiles } from './FadingTile';
 import { round } from '../tools/round';
 import { Physics } from '@react-three/cannon';
+import { Score } from './Score';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
 
-  const [score, setScore] = useState('0');
   const [index, setIndex] = useState(0);
   const defaultPreviousTile: Pick<TileProps, 'position' | 'size'> = useMemo(
     () => ({
@@ -108,8 +108,6 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         index,
       },
     ]);
-
-    setScore(String(index + 1));
   }
 
   function moveUp() {
@@ -131,23 +129,11 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     setIndex(-1);
     setFadingTiles([]);
     setStaticTiles([]);
-    setScore(String(0));
   }
 
   return (
     <div style={{ height: '100vh', background: '#000' }}>
-      <div
-        style={{
-          textAlign: 'center',
-          color: 'white',
-          fontSize: '5rem',
-          position: 'fixed',
-          top: '2rem',
-          width: '100%',
-        }}
-      >
-        {score}
-      </div>
+      <Score index={index} />
       <Canvas
         camera={{
           fov: 25, // 45
