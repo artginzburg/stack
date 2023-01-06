@@ -1,6 +1,7 @@
 import './Greeting.css';
 
-export function Greeting({ index }: { index: number }) {
+export function Greeting({ index, isStarted }: { index: number; isStarted: boolean }) {
+  if (isStarted) return null; // TODO make a fading out animation.
   if (index) return null;
 
   const headingTop = 5;

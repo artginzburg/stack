@@ -18,6 +18,7 @@ import { Greeting } from './Greeting';
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
 
+  const [isStarted, setIsStarted] = useState(false);
   const [index, setIndex] = useState(0);
   const defaultPreviousTile: Pick<TileProps, 'position' | 'size'> = useMemo(
     () => ({
@@ -127,14 +128,24 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   }
 
   function reset() {
+    setIsStarted(false);
     setIndex(-1);
     setFadingTiles([]);
     setStaticTiles([]);
   }
 
+  function act() {
+    if (!isStarted) {
+      setIsStarted(true);
+      return;
+    }
+    cutBox();
+    moveUp();
+  }
+
   return (
     <div style={{ height: '100vh', background: '#000' }}>
-      <Greeting index={index} />
+      <Greeting index={index} isStarted={isStarted} />
       <Score index={index} />
       <Canvas
         camera={{
@@ -147,30 +158,26 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         // dpr={0.7}
         {...(autoplay
           ? {
-              onClick: () => {
-                cutBox();
-                moveUp();
-              },
+              onClick: act,
             }
           : {
-              onPointerDown: () => {
-                cutBox();
-                moveUp();
-              },
+              onPointerDown: act,
             })}
         shadows="basic"
       >
         <CameraController previousTile={previousTile} />
         <ambientLight color="#ccc" intensity={0.4} />
         <DirLight />
-        <MovingTile
-          size={[100, 100]}
-          index={index}
-          movingTileMeshRef={movingTileMeshRef}
-          previousTile={previousTile}
-          autoplay={autoplay}
-          lastCube={staticTiles.at(-1)}
-        />
+        {isStarted && (
+          <MovingTile
+            size={[100, 100]}
+            index={index}
+            movingTileMeshRef={movingTileMeshRef}
+            previousTile={previousTile}
+            autoplay={autoplay}
+            lastCube={staticTiles.at(-1)}
+          />
+        )}
         <Physics gravity={[0, -400, 0]}>
           <BaseTile />
           {staticTiles.map((tile) => (
