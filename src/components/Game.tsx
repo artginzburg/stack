@@ -10,6 +10,7 @@ import { DirLight } from './DirLight';
 import { MovingTile } from './MovingTile';
 import { ReactTile, TileProps } from './Tile';
 import { FadingTileProps, FadingTiles } from './FadingTile';
+import { round } from '../tools/round';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
@@ -43,8 +44,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     // get vectors difference
     const diff = currentCenter.clone().sub(previousTile.position);
 
-    const absDiffX = Math.abs(diff.x);
-    const absDiffZ = Math.abs(diff.z);
+    const absDiffX = round(Math.abs(diff.x), 14); // JS messes up floating point calculation, which results in `x` or `z` being e.g. 3.552713678800501e-15 instead of 0. If it is not zero when it should be, the box will spawn in a physically impossible position and start glitching, or spawn one-sided. That's why I'm rounding to a precision that a human would not distinguish, but which rounds values really close to 0 to plain 0.
+    const absDiffZ = round(Math.abs(diff.z), 14);
 
     const newSize = previousTile.size.clone();
     newSize.x -= absDiffX;
@@ -73,7 +74,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
       const cutSizeZ = previousTile.size.y - newSize.y;
 
       const signX = currentCenter.x - previousTile.position.x < 0 ? -1 : 1;
-      const signZ = currentCenter.z - previousTile.position.y < 0 ? -1 : 1;
+      const signZ = currentCenter.z - previousTile.position.z < 0 ? -1 : 1;
 
       const position = new Vector3(
         cutSizeX ? currentCenter.x + (signX * newSize.x) / 2 : previousTile.position.x,
