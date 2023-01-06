@@ -141,6 +141,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
           far: 2000,
           position: [-250, 250, -250],
         }}
+        orthographic
         // dpr={0.7}
         {...(autoplay
           ? {

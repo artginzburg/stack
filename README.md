@@ -10,6 +10,7 @@ Just saw [KonradLinkowski/Stack](https://github.com/KonradLinkowski/Stack), and 
 - `pointerDown` instead of `click` event to play. Because that's how it worked in the original game.
 - Adapt game size to the user's screen (only based on screen width for now).
 - Physics for cut off tiles.
+- Orthographic (non-perspective) camera, like in the original game.
 
 ## Plans
 

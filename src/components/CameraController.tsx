@@ -17,13 +17,22 @@ export function CameraController({ previousTile }: { previousTile: PreviousTile 
 
   const camera = useThree((state) => state.camera);
 
-  useThree(({ camera, viewport, size }) => {
-    // console.log(, viewport.width);
+  useThree(({ camera, size }) => {
+    const minimumZoom = 1;
 
-    const newZoom = Math.round(size.width / viewport.dpr / 500);
-    const limitedZoom = Math.min(1, Math.max(0.5, newZoom));
+    const breakRoundWidth = 3;
+    const fineTunedWidthDivider = 800;
 
-    // console.log('zoom', newZoom, 'limited:', limitedZoom);
+    const newZoom =
+      Math.round((size.width / fineTunedWidthDivider) * breakRoundWidth) / breakRoundWidth +
+      minimumZoom;
+
+    const mobileBreakpoint = 700;
+    const mobileMultiplier = 1.3;
+    const desktopMultiplier = 1.5;
+
+    const limitedZoom =
+      newZoom * (size.width > mobileBreakpoint ? desktopMultiplier : mobileMultiplier);
 
     camera.zoom = limitedZoom;
     camera.updateProjectionMatrix();
