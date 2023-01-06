@@ -4,6 +4,9 @@ import { Vector3 } from 'three';
 import type { PreviousTile } from './types';
 
 export function CameraController({ previousTile }: { previousTile: PreviousTile }) {
+  const skipFirst = 2;
+  const skipFirstOffset = skipFirst * 10;
+
   // const [point, setPoint] = useState(new Vector3());
   const [start, setStart] = useState(new Vector3());
   const [destination, setDestination] = useState(new Vector3());
@@ -35,6 +38,11 @@ export function CameraController({ previousTile }: { previousTile: PreviousTile 
   }, [camera, offset, previousTile.position.y]);
 
   useFrame((state, delta) => {
+    if (previousTile.position.y < skipFirstOffset) {
+      camera.position.y = defaultOffset.y + skipFirstOffset;
+      return;
+    }
+
     const ease = (t: number) => t * t * (3.0 - 2.0 * t);
     if (timer < animationTime) {
       const change = ease(timer / animationTime);
