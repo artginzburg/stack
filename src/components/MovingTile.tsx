@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import { BoxGeometry, Mesh, Vector2Tuple, Vector3 } from 'three';
+import { getTileColor } from '../shared/colors';
 
 import type { TileProps } from './Tile';
 import type { PreviousTile } from './types';
@@ -102,7 +103,7 @@ export function MovingTile({
   return (
     <mesh ref={movingTileMeshRef} castShadow>
       <boxGeometry args={[size[0], height, size[1]]} />
-      <meshPhongMaterial color={`hsl(${index * 5}, 50%, 50%)`} />
+      <meshPhongMaterial color={getTileColor(index)} />
     </mesh>
   );
 }

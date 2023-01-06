@@ -1,5 +1,6 @@
 import { Triplet, useBox } from '@react-three/cannon';
 import { Mesh, Vector2, Vector3 } from 'three';
+import { getTileColor } from '../shared/colors';
 
 export interface TileProps {
   position: Vector3;
@@ -19,7 +20,7 @@ export function ReactTile({ position, size, index }: TileProps) {
 
   return (
     <mesh ref={ref} castShadow receiveShadow>
-      <meshPhongMaterial color={`hsl(${index * 5}, 50%, 50%)`} />
+      <meshPhongMaterial color={getTileColor(index)} />
       <boxGeometry args={boxArgs} />
     </mesh>
   );

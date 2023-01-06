@@ -1,5 +1,6 @@
 import { Triplet, useBox } from '@react-three/cannon';
 import { Mesh } from 'three';
+import { getTileColor } from '../shared/colors';
 
 import type { TileProps } from './Tile';
 
@@ -27,7 +28,7 @@ function ReactFadingTile({ position, size, index }: TileProps) {
 
   return (
     <mesh ref={ref} castShadow receiveShadow>
-      <meshPhongMaterial color={`hsl(${index * 5}, 50%, 50%)`} />
+      <meshPhongMaterial color={getTileColor(index)} />
       <boxGeometry args={boxArgs} />
     </mesh>
   );
