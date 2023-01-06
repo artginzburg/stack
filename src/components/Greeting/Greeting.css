@@ -15,3 +15,20 @@
     filter: blur(0);
   }
 }
+
+.fadeOut {
+  opacity: 1;
+  filter: blur(0);
+
+  animation: fadeOut 0.4s ease-in forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+  }
+}

@@ -1,8 +1,7 @@
 import './Greeting.css';
 
 export function Greeting({ index, isStarted }: { index: number; isStarted: boolean }) {
-  if (isStarted) return null; // TODO make a fading out animation.
-  if (index) return null;
+  if (index > 2) return null;
 
   const headingTop = 5;
   const headingSize = 4;
@@ -20,10 +19,12 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
     position: 'fixed',
   };
 
+  const className = ['greeting', isStarted || index ? 'fadeOut' : null].filter(Boolean).join(' ');
+
   return (
     <>
       <div
-        className="greeting"
+        className={className}
         style={{
           ...sharedStyleProps,
           fontSize: `${headingSize}rem`,
@@ -33,7 +34,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
         stack
       </div>
       <div
-        className="greeting"
+        className={className}
         style={{
           ...sharedStyleProps,
           animationDelay: '0.2s',
