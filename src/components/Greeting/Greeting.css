@@ -1,0 +1,17 @@
+.greeting {
+  opacity: 0;
+  filter: blur(20px);
+
+  animation: appearFromBlur 0.55s ease-out forwards;
+}
+
+@keyframes appearFromBlur {
+  from {
+    opacity: 0;
+    filter: blur(20px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}

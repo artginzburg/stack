@@ -13,6 +13,7 @@ import { FadingTiles } from './FadingTile';
 import { round } from '../tools/round';
 import { Physics } from '@react-three/cannon';
 import { Score } from './Score';
+import { Greeting } from './Greeting';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
@@ -133,6 +134,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
   return (
     <div style={{ height: '100vh', background: '#000' }}>
+      <Greeting index={index} />
       <Score index={index} />
       <Canvas
         camera={{
