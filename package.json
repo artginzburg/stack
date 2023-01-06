@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://artginzburg.github.io/stack/",
   "dependencies": {
+    "@react-three/cannon": "^6.5.2",
     "@react-three/drei": "^9.51.3",
     "@react-three/fiber": "^8.10.0",
     "@testing-library/jest-dom": "^5.16.5",

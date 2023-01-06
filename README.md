@@ -9,11 +9,11 @@ Just saw [KonradLinkowski/Stack](https://github.com/KonradLinkowski/Stack), and 
 - Auto-play. It is a dev-only feature that makes the game play itself, with some level of error if required. Essentially, this is an automatic test.
 - `pointerDown` instead of `click` event to play. Because that's how it worked in the original game.
 - Adapt game size to the user's screen (only based on screen width for now).
+- Physics for cut off tiles.
 
 ## Plans
 
 - Eliminate all `useRef()`s.
 - Use auto-play like a real test — speed it up, add to `npm test`, plus CI.
-- Physics for cut off tiles.
 
 > And everything else that Konrad pointed out in Todo, of course.

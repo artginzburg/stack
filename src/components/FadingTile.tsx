@@ -1,43 +1,9 @@
-import { useFrame } from '@react-three/fiber';
+import { Triplet, useBox } from '@react-three/cannon';
+import { Mesh } from 'three';
 
 import type { TileProps } from './Tile';
 
-export interface FadingTileProps extends TileProps {
-  materialOpacity: number;
-  timer: number;
-}
-
-export function FadingTiles({
-  fadingTiles,
-  setFadingTiles,
-}: {
-  fadingTiles: FadingTileProps[];
-  setFadingTiles: React.Dispatch<React.SetStateAction<FadingTileProps[]>>;
-}) {
-  const animationTime = 0.3;
-
-  const ease = (t: number) => t * t * (3.0 - 2.0 * t);
-
-  useFrame((state, delta) => {
-    setFadingTiles((prev) =>
-      prev
-        .map((fadingTile) =>
-          fadingTile.materialOpacity < 0.05
-            ? (null as any)
-            : {
-                ...fadingTile,
-                ...(fadingTile.timer < animationTime
-                  ? {
-                      materialOpacity: 1 - ease(fadingTile.timer / animationTime),
-                      timer: fadingTile.timer + delta,
-                    }
-                  : undefined),
-              },
-        )
-        .filter(Boolean),
-    );
-  });
-
+export function FadingTiles({ fadingTiles }: { fadingTiles: TileProps[] }) {
   return (
     <>
       {fadingTiles.map((fadingTile) => (
@@ -47,18 +13,22 @@ export function FadingTiles({
   );
 }
 
-function ReactFadingTile({ position, size, index, materialOpacity }: FadingTileProps) {
+function ReactFadingTile({ position, size, index }: TileProps) {
   /** @todo exclude from here, duplicated value. */
   const height = 10;
 
+  const boxArgs: Triplet = [size.x, height, size.y];
+
+  const [ref] = useBox<Mesh>(() => ({
+    mass: 10,
+    position: [position.x, index * height, position.z],
+    args: boxArgs,
+  }));
+
   return (
-    <mesh position={[position.x, index * height, position.z]}>
-      <meshPhongMaterial
-        color={`hsl(${index * 5}, 50%, 50%)`}
-        transparent
-        opacity={materialOpacity}
-      />
-      <boxGeometry args={[size.x, height, size.y]} />
+    <mesh ref={ref} castShadow receiveShadow>
+      <meshPhongMaterial color={`hsl(${index * 5}, 50%, 50%)`} />
+      <boxGeometry args={boxArgs} />
     </mesh>
   );
 }

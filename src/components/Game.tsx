@@ -9,8 +9,9 @@ import { CameraController } from './CameraController';
 import { DirLight } from './DirLight';
 import { MovingTile } from './MovingTile';
 import { ReactTile, TileProps } from './Tile';
-import { FadingTileProps, FadingTiles } from './FadingTile';
+import { FadingTiles } from './FadingTile';
 import { round } from '../tools/round';
+import { Physics } from '@react-three/cannon';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
@@ -25,7 +26,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     [],
   );
   const [staticTiles, setStaticTiles] = useState<TileProps[]>([]);
-  const [fadingTiles, setFadingTiles] = useState<FadingTileProps[]>([]);
+  const [fadingTiles, setFadingTiles] = useState<TileProps[]>([]);
   const [effects, setEffects] = useState<PerfectEffectProps[]>([]);
 
   const movingTileMeshRef = useRef<Mesh>(null);
@@ -89,8 +90,6 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
           position,
           size: new Vector2(cutSizeX || previousTile.size.x, cutSizeZ || previousTile.size.y),
           index,
-          materialOpacity: 1,
-          timer: 0,
         },
       ]);
     }
@@ -175,7 +174,6 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         <CameraController previousTile={previousTile} />
         <ambientLight color="#ccc" intensity={0.4} />
         <DirLight />
-        <BaseTile />
         <MovingTile
           size={[100, 100]}
           index={index}
@@ -184,10 +182,13 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
           autoplay={autoplay}
           lastCube={staticTiles.at(-1)}
         />
-        {staticTiles.map((tile) => (
-          <ReactTile key={tile.index} {...tile} />
-        ))}
-        <FadingTiles fadingTiles={fadingTiles} setFadingTiles={setFadingTiles} />
+        <Physics gravity={[0, -400, 0]}>
+          <BaseTile />
+          {staticTiles.map((tile) => (
+            <ReactTile key={tile.index} {...tile} />
+          ))}
+          <FadingTiles fadingTiles={fadingTiles} />
+        </Physics>
         <PerfectEffects effects={effects} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
       </Canvas>

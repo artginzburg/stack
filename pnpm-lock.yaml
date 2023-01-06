@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@react-three/cannon': ^6.5.2
   '@react-three/drei': ^9.51.3
   '@react-three/fiber': ^8.10.0
   '@testing-library/jest-dom': ^5.16.5
@@ -20,6 +21,7 @@ specifiers:
   web-vitals: ^2.1.4
 
 dependencies:
+  '@react-three/cannon': 6.5.2_t7ymb6ttyjlelrzogbicdgxbny
   '@react-three/drei': 9.51.3_xrskfjgmwd72lb724i4wvop5hq
   '@react-three/fiber': 8.10.0_4tzez3c2xpzuefjrvhpyy55bva
   '@testing-library/jest-dom': 5.16.5
@@ -2016,6 +2018,14 @@ packages:
       webpack-dev-server: 4.11.1_webpack@5.75.0
     dev: false
 
+  /@pmndrs/cannon-worker-api/2.3.2_three@0.148.0:
+    resolution: {integrity: sha512-+4YGTH7XfSvUYUa65LoltcDMRLu3lr7rFtHT9dmeCeu2JJ7Zg2xBFJ5wiWSJmcM1ECh2R0YDcROdEQ1JKpOgFA==}
+    peerDependencies:
+      three: '>=0.139'
+    dependencies:
+      three: 0.148.0
+    dev: false
+
   /@react-spring/animated/9.6.1_react@18.2.0:
     resolution: {integrity: sha512-ls/rJBrAqiAYozjLo5EPPLLOb1LM0lNVQcXODTC1SMtS6DbuBCPaKco5svFUQFMP2dso3O+qcC4k9FsKc0KxMQ==}
     peerDependencies:
@@ -2070,6 +2080,23 @@ packages:
 
   /@react-spring/types/9.6.1:
     resolution: {integrity: sha512-POu8Mk0hIU3lRXB3bGIGe4VHIwwDsQyoD1F394OK7STTiX9w4dG3cTLljjYswkQN+hDSHRrj4O36kuVa7KPU8Q==}
+    dev: false
+
+  /@react-three/cannon/6.5.2_t7ymb6ttyjlelrzogbicdgxbny:
+    resolution: {integrity: sha512-d7qH2XMVtHRkCaMUWpLkWSD9JPiE570gy8LoP7WBw+Ui+hI9ZiFx9HDaX5+Y6wzbGJd1WvELWaG9O0cOtk2rmw==}
+    peerDependencies:
+      '@react-three/fiber': '>=8'
+      react: '>=18'
+      three: '>=0.139'
+    dependencies:
+      '@pmndrs/cannon-worker-api': 2.3.2_three@0.148.0
+      '@react-three/fiber': 8.10.0_4tzez3c2xpzuefjrvhpyy55bva
+      cannon-es: 0.20.0
+      cannon-es-debugger: 1.0.0_ytqjmtckqwtsjebg6ktygbfp7u
+      react: 18.2.0
+      three: 0.148.0
+    transitivePeerDependencies:
+      - typescript
     dev: false
 
   /@react-three/drei/9.51.3_xrskfjgmwd72lb724i4wvop5hq:
@@ -3627,6 +3654,25 @@ packages:
 
   /caniuse-lite/1.0.30001441:
     resolution: {integrity: sha512-OyxRR4Vof59I3yGWXws6i908EtGbMzVUi3ganaZQHmydk1iwDhRnvaPG2WaR0KcqrDFKrxVZHULT396LEPhXfg==}
+    dev: false
+
+  /cannon-es-debugger/1.0.0_ytqjmtckqwtsjebg6ktygbfp7u:
+    resolution: {integrity: sha512-sE9lDOBAYFKlh+0w+cvWKwUhJef8HYnUSVPWPL0jD15MAuVRQKno4QYZSGxgOoJkMR3mQqxL4bxys2b3RSWH8g==}
+    peerDependencies:
+      cannon-es: 0.x
+      three: 0.x
+      typescript: '>=3.8'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      cannon-es: 0.20.0
+      three: 0.148.0
+      typescript: 4.9.4
+    dev: false
+
+  /cannon-es/0.20.0:
+    resolution: {integrity: sha512-eZhWTZIkFOnMAJOgfXJa9+b3kVlvG+FX4mdkpePev/w/rP5V8NRquGyEozcjPfEoXUlb+p7d9SUcmDSn14prOA==}
     dev: false
 
   /case-sensitive-paths-webpack-plugin/2.4.0:
