@@ -3,7 +3,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { Vector3 } from 'three';
 import type { PreviousTile } from './types';
 
-export function CameraController({ previousTile }: { previousTile: PreviousTile }) {
+export function CameraController({
+  previousTile,
+  isEnded,
+}: {
+  previousTile: PreviousTile;
+  isEnded: boolean;
+}) {
   const skipFirst = 2;
   const skipFirstOffset = skipFirst * 10;
 
@@ -15,9 +21,23 @@ export function CameraController({ previousTile }: { previousTile: PreviousTile 
   const [timer, setTimer] = useState<number>(0);
   const [animationTime] = useState(0.5);
 
+  const [initialViewportDistance, setInitialViewportDistance] = useState(0);
+
   const camera = useThree((state) => state.camera);
 
-  useThree(({ camera, size }) => {
+  useThree(({ camera, viewport, size }) => {
+    if (initialViewportDistance === 0) {
+      setInitialViewportDistance(viewport.distance);
+    }
+
+    if (isEnded) {
+      const newZoom = initialViewportDistance / viewport.distance;
+      camera.position.set(-250, destination.y - 150 / newZoom, -250);
+      camera.zoom = newZoom;
+      camera.updateProjectionMatrix();
+      return;
+    }
+
     const minimumZoom = 1;
 
     const breakRoundWidth = 3;
