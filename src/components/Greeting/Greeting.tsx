@@ -1,23 +1,23 @@
 import './Greeting.css';
 
+export const sharedStyleProps: React.CSSProperties = {
+  textAlign: 'center',
+  width: '100%',
+
+  color: 'white',
+  fontWeight: 100,
+  letterSpacing: 1,
+  fontStretch: '120%',
+  textTransform: 'uppercase',
+
+  position: 'fixed',
+};
+
 export function Greeting({ index, isStarted }: { index: number; isStarted: boolean }) {
   if (index > 2) return null;
 
   const headingTop = 5;
   const headingSize = 4;
-
-  const sharedStyleProps: React.CSSProperties = {
-    textAlign: 'center',
-    width: '100%',
-
-    color: 'white',
-    fontWeight: 100,
-    letterSpacing: 1,
-    fontStretch: '120%',
-    textTransform: 'uppercase',
-
-    position: 'fixed',
-  };
 
   const className = ['greeting', isStarted || index ? 'fadeOut' : null].filter(Boolean).join(' ');
 

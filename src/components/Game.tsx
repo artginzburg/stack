@@ -14,11 +14,13 @@ import { round } from '../tools/round';
 import { Physics } from '@react-three/cannon';
 import { Score } from './Score';
 import { Greeting } from './Greeting';
+import { GameEnding } from './GameEnding';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
 
   const [isStarted, setIsStarted] = useState(false);
+  const [isEnded, setIsEnded] = useState(false);
   const [index, setIndex] = useState(0);
   const defaultPreviousTile: Pick<TileProps, 'position' | 'size'> = useMemo(
     () => ({
@@ -55,7 +57,19 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     newSize.y -= absDiffZ;
 
     if (newSize.x < 0 || newSize.y < 0) {
-      reset();
+      lose();
+
+      setFadingTiles((prev) => {
+        if (!movingTileMeshRef.current) return prev;
+        return [
+          ...prev,
+          {
+            position: movingTileMeshRef.current.position,
+            size: previousTile.size,
+            index,
+          },
+        ];
+      });
       return;
     }
 
@@ -127,14 +141,23 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     ]);
   }
 
+  function lose() {
+    setIsEnded(true);
+  }
+
   function reset() {
+    setIsEnded(false);
     setIsStarted(false);
-    setIndex(-1);
+    setIndex(0);
     setFadingTiles([]);
     setStaticTiles([]);
   }
 
   function act() {
+    if (isEnded) {
+      reset();
+      return;
+    }
     if (!isStarted) {
       setIsStarted(true);
       return;
@@ -168,7 +191,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         <CameraController previousTile={previousTile} />
         <ambientLight color="#ccc" intensity={0.4} />
         <DirLight />
-        {isStarted && (
+        {isStarted && !isEnded && (
           <MovingTile
             size={[100, 100]}
             index={index}
@@ -188,6 +211,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         <PerfectEffects effects={effects} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
       </Canvas>
+      <GameEnding isStarted={isStarted} isEnded={isEnded} />
     </div>
   );
 }
