@@ -151,6 +151,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
   function lose() {
     setIsEnded(true);
+    setIndex((prev) => prev - 1);
   }
 
   function reset() {
