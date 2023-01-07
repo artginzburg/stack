@@ -190,8 +190,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         shadows="basic"
       >
         <CameraController previousTile={previousTile} isEnded={isEnded} />
-        <ambientLight color="#ccc" intensity={0.4} />
-        <DirLight />
+        <ambientLight color="#ccc" intensity={0.9} />
+        <DirLight previousTile={previousTile} />
         {isStarted && !isEnded && (
           <MovingTile
             index={index}
