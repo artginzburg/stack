@@ -151,6 +151,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     setIndex(0);
     setFadingTiles([]);
     setStaticTiles([]);
+    setEffects([]);
   }
 
   function act() {
