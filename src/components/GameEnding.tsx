@@ -5,7 +5,9 @@ export function GameEnding({ isStarted, isEnded }: { isStarted: boolean; isEnded
   if (!isStarted && !isEnded) return null;
   if (isStarted && !isEnded) return null;
 
-  const className = ['greeting', isEnded ? null : 'fadeOut'].filter(Boolean).join(' ');
+  const className = ['greeting', isEnded ? null : 'fadeOut', 'tapOrClickBefore']
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <>
@@ -19,7 +21,8 @@ export function GameEnding({ isStarted, isEnded }: { isStarted: boolean; isEnded
           bottom: '4rem',
         }}
       >
-        tap to restart
+        {' '}
+        to restart
       </div>
     </>
   );

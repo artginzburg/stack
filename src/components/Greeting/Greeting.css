@@ -32,3 +32,12 @@
     opacity: 0;
   }
 }
+
+.tapOrClickBefore::before {
+  content: 'tap';
+}
+@media screen and (hover: hover) {
+  .tapOrClickBefore::before {
+    content: 'click';
+  }
+}

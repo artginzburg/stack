@@ -34,7 +34,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
         stack
       </div>
       <div
-        className={className}
+        className={className + ' tapOrClickBefore'}
         style={{
           ...sharedStyleProps,
           animationDelay: '0.2s',
@@ -43,7 +43,8 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
           top: `${headingTop + headingSize + 2}rem`,
         }}
       >
-        tap to start
+        {' '}
+        to start
       </div>
     </>
   );
