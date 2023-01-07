@@ -30,7 +30,7 @@ export function MovingTile({
     const mesh = movingTileMeshRef.current;
 
     const axis = index % 2 === 0 ? 'x' : 'z';
-    const addedPosition = delta * 150;
+    const addedPosition = delta * 157;
     mesh.position[axis] += addedPosition * direction;
 
     if (autoplay) {
