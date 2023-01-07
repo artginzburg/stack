@@ -16,7 +16,7 @@ export function PerfectEffects({
             ? (null as any)
             : {
                 ...effect,
-                materialOpacity: effect.materialOpacity - delta * 2,
+                materialOpacity: effect.materialOpacity - delta * 0.7,
               },
         )
         .filter(Boolean),
