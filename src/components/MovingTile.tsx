@@ -20,7 +20,8 @@ export function MovingTile({
   lastCube: TileProps | undefined;
 }) {
   const height = 10;
-  const startOffset = 100;
+  const defaultTileSize = 100;
+  const startOffset = defaultTileSize + defaultTileSize / 4;
   const [direction, setDirection] = useState(-1);
 
   useFrame((state, delta) => {
@@ -57,15 +58,12 @@ export function MovingTile({
       }
     }
 
-    const sideOffset = startOffset / 4;
-    const maxSidePosition = startOffset + sideOffset;
-
-    if (Math.abs(mesh.position[axis]) >= maxSidePosition) {
+    if (Math.abs(mesh.position[axis]) >= startOffset) {
       setDirection((prev) => -prev);
       // Is this `mesh.position.clamp` call necessary? Seems to work the same way without it.
       mesh.position.clamp(
-        new Vector3(-maxSidePosition, Number.NEGATIVE_INFINITY, -maxSidePosition),
-        new Vector3(maxSidePosition, Number.POSITIVE_INFINITY, maxSidePosition),
+        new Vector3(-startOffset, Number.NEGATIVE_INFINITY, -startOffset),
+        new Vector3(startOffset, Number.POSITIVE_INFINITY, startOffset),
       );
     }
   });
@@ -87,14 +85,7 @@ export function MovingTile({
       index * height,
       !even ? startOffset : mesh.position.z,
     );
-  }, [
-    index,
-    movingTileMeshRef,
-    previousTile.position.x,
-    previousTile.position.z,
-    previousTile.size.x,
-    previousTile.size.y,
-  ]);
+  }, [index, movingTileMeshRef, previousTile.position.x, previousTile.position.z, startOffset]);
 
   return (
     <mesh ref={movingTileMeshRef} castShadow>
