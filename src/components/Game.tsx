@@ -2,6 +2,7 @@ import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
 import { BaseTile } from './BaseTile';
@@ -15,6 +16,7 @@ import { Physics } from '@react-three/cannon';
 import { Score } from './Score';
 import { Greeting } from './Greeting';
 import { GameEnding } from './GameEnding';
+import { LocalStorageKeys } from '../shared/LocalStorageKeys';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
@@ -22,6 +24,12 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   const [isStarted, setIsStarted] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
   const [index, setIndex] = useState(0);
+  const [highScore, setHighScore] = useLocalStorage(LocalStorageKeys.HighScore, index);
+  const [isHighScoreNew, setIsHighScoreNew] = useState(false);
+  if (index > highScore) {
+    setIsHighScoreNew(true);
+    setHighScore(index);
+  }
   const defaultPreviousTile: Pick<TileProps, 'position' | 'size'> = useMemo(
     () => ({
       size: new Vector2(100, 100),
@@ -152,6 +160,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     setFadingTiles([]);
     setStaticTiles([]);
     setEffects([]);
+    setIsHighScoreNew(false);
   }
 
   function act() {
@@ -211,7 +220,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         <PerfectEffects effects={effects} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
       </Canvas>
-      <GameEnding isStarted={isStarted} isEnded={isEnded} />
+      <GameEnding isStarted={isStarted} isEnded={isEnded} isHighScoreNew={isHighScoreNew} />
     </div>
   );
 }
