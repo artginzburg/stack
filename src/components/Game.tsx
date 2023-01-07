@@ -194,7 +194,6 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         <DirLight />
         {isStarted && !isEnded && (
           <MovingTile
-            size={[100, 100]}
             index={index}
             movingTileMeshRef={movingTileMeshRef}
             previousTile={previousTile}

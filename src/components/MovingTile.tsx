@@ -1,20 +1,18 @@
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
-import { BoxGeometry, Mesh, Vector2Tuple, Vector3 } from 'three';
+import { Mesh, Vector3 } from 'three';
 import { getTileColor } from '../shared/colors';
 
 import type { TileProps } from './Tile';
 import type { PreviousTile } from './types';
 
 export function MovingTile({
-  size,
   index,
   movingTileMeshRef,
   previousTile,
   autoplay,
   lastCube,
 }: {
-  size: Vector2Tuple;
   index: number;
   movingTileMeshRef: React.RefObject<Mesh>;
   previousTile: PreviousTile;
@@ -61,13 +59,12 @@ export function MovingTile({
 
     if (Math.abs(mesh.position[axis]) >= 100) {
       setDirection((prev) => -prev);
+      // Is this `mesh.position.clamp` call necessary? Seems to work the same way without it.
       mesh.position.clamp(
         new Vector3(-100, Number.NEGATIVE_INFINITY, -100),
         new Vector3(100, Number.POSITIVE_INFINITY, 100),
       );
     }
-
-    return null;
   });
 
   useEffect(() => {
@@ -76,9 +73,6 @@ export function MovingTile({
     const mesh = movingTileMeshRef.current;
 
     // Resize
-    mesh.geometry.dispose();
-    const geometry = new BoxGeometry(previousTile.size.x, height, previousTile.size.y);
-    mesh.geometry = geometry;
     mesh.position.x = previousTile.position.x;
     mesh.position.z = previousTile.position.z;
     // End Resize.
@@ -97,12 +91,11 @@ export function MovingTile({
     previousTile.position.z,
     previousTile.size.x,
     previousTile.size.y,
-    startOffset,
   ]);
 
   return (
     <mesh ref={movingTileMeshRef} castShadow>
-      <boxGeometry args={[size[0], height, size[1]]} />
+      <boxGeometry args={[previousTile.size.x, height, previousTile.size.y]} />
       <meshPhongMaterial color={getTileColor(index)} />
     </mesh>
   );
