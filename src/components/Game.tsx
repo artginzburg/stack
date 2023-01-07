@@ -178,7 +178,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   }
 
   return (
-    <div style={{ height: '100vh', background: '#000' }}>
+    <div style={{ height: '100vh', background: autoplay ? '#1f0014' : '#000' }}>
       <Greeting index={index} isStarted={isStarted} />
       <Score index={index} />
       <Canvas
