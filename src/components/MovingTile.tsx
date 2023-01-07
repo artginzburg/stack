@@ -57,12 +57,15 @@ export function MovingTile({
       }
     }
 
-    if (Math.abs(mesh.position[axis]) >= 100) {
+    const sideOffset = startOffset / 4;
+    const maxSidePosition = startOffset + sideOffset;
+
+    if (Math.abs(mesh.position[axis]) >= maxSidePosition) {
       setDirection((prev) => -prev);
       // Is this `mesh.position.clamp` call necessary? Seems to work the same way without it.
       mesh.position.clamp(
-        new Vector3(-100, Number.NEGATIVE_INFINITY, -100),
-        new Vector3(100, Number.POSITIVE_INFINITY, 100),
+        new Vector3(-maxSidePosition, Number.NEGATIVE_INFINITY, -maxSidePosition),
+        new Vector3(maxSidePosition, Number.POSITIVE_INFINITY, maxSidePosition),
       );
     }
   });
