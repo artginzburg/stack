@@ -1,22 +1,22 @@
+import { Physics } from '@react-three/cannon';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useLocalStorage } from 'usehooks-ts';
 
-import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
+import { LocalStorageKeys } from '../shared/LocalStorageKeys';
+import { round } from '../tools/round';
 import { BaseTile } from './BaseTile';
 import { CameraController } from './CameraController';
 import { DirLight } from './DirLight';
-import { MovingTile } from './MovingTile';
-import { ReactTile, TileProps } from './Tile';
 import { FadingTiles } from './FadingTile';
-import { round } from '../tools/round';
-import { Physics } from '@react-three/cannon';
-import { Score } from './Score';
-import { Greeting } from './Greeting';
 import { GameEnding } from './GameEnding';
-import { LocalStorageKeys } from '../shared/LocalStorageKeys';
+import { Greeting } from './Greeting';
+import { MovingTile } from './MovingTile';
+import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
+import { Score } from './Score';
+import { ReactTile, TileProps } from './Tile';
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');

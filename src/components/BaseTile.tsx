@@ -1,5 +1,6 @@
 import { Triplet, useBox } from '@react-three/cannon';
 import { Mesh } from 'three';
+
 import { getBaseTileColor } from '../shared/colors';
 
 export function BaseTile() {

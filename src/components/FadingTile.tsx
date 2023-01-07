@@ -1,5 +1,6 @@
 import { Triplet, useBox } from '@react-three/cannon';
 import { Mesh } from 'three';
+
 import { getTileColor } from '../shared/colors';
 
 import type { TileProps } from './Tile';

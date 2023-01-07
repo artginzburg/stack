@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import { Mesh, Vector3 } from 'three';
+
 import { getTileColor } from '../shared/colors';
 
 import type { TileProps } from './Tile';

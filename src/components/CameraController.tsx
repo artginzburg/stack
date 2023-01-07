@@ -1,6 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useState } from 'react';
 import { Vector3 } from 'three';
+
 import type { PreviousTile } from './types';
 
 export function CameraController({
