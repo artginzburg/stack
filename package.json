@@ -2,6 +2,7 @@
   "name": "stack",
   "version": "0.1.0",
   "private": true,
+  "description": "The best block-stacking game · now in Web",
   "repository": "artginzburg/stack",
   "homepage": "https://ginzburg.art/stack/",
   "dependencies": {
