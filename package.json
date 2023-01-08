@@ -26,6 +26,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:prod": "export GENERATE_SOURCEMAP=false && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
