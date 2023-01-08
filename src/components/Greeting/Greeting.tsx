@@ -1,5 +1,9 @@
 import './Greeting.css';
 
+import { useMemo, useState } from 'react';
+
+import packageJson from '../../../package.json';
+
 export const sharedStyleProps: React.CSSProperties = {
   textAlign: 'center',
   width: '100%',
@@ -14,7 +18,21 @@ export const sharedStyleProps: React.CSSProperties = {
 };
 
 export function Greeting({ index, isStarted }: { index: number; isStarted: boolean }) {
+  const [shouldDisplay, setShouldDisplay] = useState(true);
+
+  if (!isStarted && !shouldDisplay) {
+    setShouldDisplay(true);
+  }
+  if (!shouldDisplay) return null;
   if (index > 2) return null;
+
+  if (isStarted || index) {
+    if (shouldDisplay) {
+      setTimeout(() => {
+        setShouldDisplay(false);
+      }, 500);
+    }
+  }
 
   const headingTop = 5;
   const headingSize = 4;
@@ -46,6 +64,42 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
         {' '}
         to start
       </div>
+      <GreetingLinks className={className} />
     </>
   );
+}
+
+function GreetingLinks({ className }: { className: string }) {
+  const repoUrl = useMemo(() => new URL(`https://github.com/${packageJson.repository}`), []);
+  const authorUrl = useMemo(() => new URL(new URL(packageJson.homepage).origin), []);
+
+  const repoDomainWithoutLevelOne = useMemo(() => getDomainWithoutLevel(repoUrl), [repoUrl]);
+
+  return (
+    <div
+      className={className + ' links'}
+      style={{
+        ...sharedStyleProps,
+        fontWeight: 300,
+        fontStretch: '100%',
+        letterSpacing: 0.5,
+        textTransform: 'none',
+
+        fontSize: '0.7rem',
+        right: '1rem',
+        bottom: '1rem',
+        textAlign: 'right',
+        zIndex: 1,
+      }}
+    >
+      <a href={repoUrl.href}>{repoDomainWithoutLevelOne}</a> /{' '}
+      <a href={authorUrl.href} target="_blank" rel="noreferrer">
+        {authorUrl.hostname}
+      </a>
+    </div>
+  );
+}
+
+function getDomainWithoutLevel(url: URL | string, stripLevel = 1): string {
+  return (url instanceof URL ? url.hostname : url).split('.').slice(0, -stripLevel).join('.');
 }

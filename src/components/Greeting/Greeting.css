@@ -41,3 +41,22 @@
     content: 'click';
   }
 }
+
+.links {
+  max-width: fit-content;
+  padding: 0.1em 0.5em 0.3em;
+  border-radius: 0.4em;
+  transition-property: backdrop-filter background-color;
+  transition-duration: 0.2s;
+}
+.links:hover {
+  backdrop-filter: blur(20px);
+  background-color: rgba(29, 30, 32, 0.4);
+}
+.links > a {
+  text-decoration: none;
+  color: inherit;
+}
+.links > a:hover {
+  color: rgb(255, 0, 98);
+}

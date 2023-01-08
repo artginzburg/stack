@@ -2,7 +2,8 @@
   "name": "stack",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://artginzburg.github.io/stack/",
+  "repository": "artginzburg/stack",
+  "homepage": "https://ginzburg.art/stack/",
   "dependencies": {
     "@react-three/cannon": "^6.5.2",
     "@react-three/drei": "^9.51.3",
