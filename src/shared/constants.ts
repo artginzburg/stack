@@ -4,6 +4,7 @@ export const magicValues = {
   pointOfViewFix: 100,
 } as const;
 
+/** @todo rename to tileConfig? Then add size. */
 export const config = {
   tileHeight: 17, // should be 17 to match the original. Was 10 in the first version if this remake.
 } as const;
