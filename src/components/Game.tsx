@@ -5,6 +5,7 @@ import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useLocalStorage } from 'usehooks-ts';
 
+import { magicValues } from '../shared/constants';
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
 import { round } from '../tools/round';
 import { BaseTile } from './BaseTile';
@@ -184,7 +185,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
       <Canvas
         camera={{
           near: 1,
-          position: [-250, 250, -250],
+          position: [-250, 250 + magicValues.pointOfViewFix, -250],
         }}
         orthographic
         // dpr={0.7}

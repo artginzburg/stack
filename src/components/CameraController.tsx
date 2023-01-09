@@ -2,6 +2,8 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useState } from 'react';
 import { Vector3 } from 'three';
 
+import { magicValues } from '../shared/constants';
+
 import type { PreviousTile } from './types';
 
 export function CameraController({
@@ -17,7 +19,10 @@ export function CameraController({
   // const [point, setPoint] = useState(new Vector3());
   const [start, setStart] = useState(new Vector3());
   const [destination, setDestination] = useState(new Vector3());
-  const defaultOffset = useMemo(() => new Vector3(-250, 250, -250), []);
+  const defaultOffset = useMemo(
+    () => new Vector3(-250, 250 + magicValues.pointOfViewFix, -250),
+    [],
+  );
   const [offset] = useState(defaultOffset);
   const [timer, setTimer] = useState<number>(0);
   const [animationTime] = useState(0.5);

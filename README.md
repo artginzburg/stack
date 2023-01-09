@@ -16,7 +16,7 @@ Just saw [KonradLinkowski/Stack][threejs-version], and decided to rewrite it fro
 - `pointerDown` instead of `click` event to play. Because that's how it worked in the original game.
 - Adapt game size to the user's screen (only based on screen width for now).
 - Physics for cut off tiles.
-- Orthographic (non-perspective) camera, like in the original game.
+- Orthographic (non-perspective) camera, like in the original game. The point of view (a.k.a. the orthographic equivalent of perspective) also exactly matches the original, double-checked by precise measurements and by overlaying screenshots of the two game versions.
 
 - Fixed some minor bugs that glitched the cut off tile once in a while.
 
