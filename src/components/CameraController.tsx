@@ -2,7 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useState } from 'react';
 import { Vector3 } from 'three';
 
-import { magicValues } from '../shared/constants';
+import { config, magicValues } from '../shared/constants';
 
 import type { PreviousTile } from './types';
 
@@ -14,13 +14,22 @@ export function CameraController({
   isEnded: boolean;
 }) {
   const skipFirst = 2;
-  const skipFirstOffset = skipFirst * 10;
+  const skipFirstOffset = skipFirst * config.tileHeight;
 
   // const [point, setPoint] = useState(new Vector3());
   const [start, setStart] = useState(new Vector3());
   const [destination, setDestination] = useState(new Vector3());
+  const magicTileHeightMultiplierForDefaultOffset = 2.5;
   const defaultOffset = useMemo(
-    () => new Vector3(-250, 250 + magicValues.pointOfViewFix, -250),
+    () =>
+      new Vector3(
+        -250,
+        250 +
+          magicValues.pointOfViewFix -
+          config.tileHeight * magicTileHeightMultiplierForDefaultOffset +
+          25,
+        -250,
+      ),
     [],
   );
   const [offset] = useState(defaultOffset);

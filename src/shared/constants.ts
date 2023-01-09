@@ -3,3 +3,7 @@ export const magicValues = {
   /** Makes the point of view exactly match the original game. */
   pointOfViewFix: 100,
 } as const;
+
+export const config = {
+  tileHeight: 17, // should be 17 to match the original. Was 10 in the first version if this remake.
+} as const;

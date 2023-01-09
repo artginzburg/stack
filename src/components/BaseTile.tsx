@@ -2,11 +2,12 @@ import { Triplet, useBox } from '@react-three/cannon';
 import { Mesh } from 'three';
 
 import { getBaseTileColor } from '../shared/colors';
+import { config } from '../shared/constants';
 
 export function BaseTile() {
   const boxArgs: Triplet = [
     100,
-    520, // 500
+    530 - config.tileHeight, // 500
     100,
   ];
 

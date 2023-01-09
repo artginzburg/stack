@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Mesh, Vector3 } from 'three';
 
 import { getTileColor } from '../shared/colors';
+import { config } from '../shared/constants';
 
 import type { TileProps } from './Tile';
 import type { PreviousTile } from './types';
@@ -20,7 +21,6 @@ export function MovingTile({
   autoplay: boolean | undefined;
   lastCube: TileProps | undefined;
 }) {
-  const height = 10;
   const defaultTileSize = 100;
   const startOffset = defaultTileSize + defaultTileSize / 4;
   const [direction, setDirection] = useState(-1);
@@ -79,18 +79,18 @@ export function MovingTile({
     mesh.position.z = previousTile.position.z;
     // End Resize.
 
-    mesh.position.y = index * height;
+    mesh.position.y = index * config.tileHeight;
     const even = index % 2 === 0;
     mesh.position.set(
       even ? startOffset : mesh.position.x,
-      index * height,
+      index * config.tileHeight,
       !even ? startOffset : mesh.position.z,
     );
   }, [index, movingTileMeshRef, previousTile.position.x, previousTile.position.z, startOffset]);
 
   return (
     <mesh ref={movingTileMeshRef} castShadow>
-      <boxGeometry args={[previousTile.size.x, height, previousTile.size.y]} />
+      <boxGeometry args={[previousTile.size.x, config.tileHeight, previousTile.size.y]} />
       <meshPhongMaterial color={getTileColor(index)} />
     </mesh>
   );

@@ -1,6 +1,8 @@
 import { useFrame } from '@react-three/fiber';
 import { BackSide, Vector2, Vector3 } from 'three';
 
+import { config } from '../shared/constants';
+
 export function PerfectEffects({
   effects,
   setEffects,
@@ -46,7 +48,10 @@ function PerfectEffect({ position, size, materialOpacity }: PerfectEffectProps) 
   }
 
   return (
-    <mesh position={[position.x, position.y - borderWidth, position.z]} rotation-x={Math.PI / 2}>
+    <mesh
+      position={[position.x, position.y - config.tileHeight / 2, position.z]}
+      rotation-x={Math.PI / 2}
+    >
       <planeGeometry args={[size.x + addedSize, size.y + addedSize]} />
       <meshBasicMaterial color="#fff" side={BackSide} transparent opacity={materialOpacity} />
     </mesh>

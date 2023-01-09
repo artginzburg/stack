@@ -2,6 +2,7 @@ import { Triplet, useBox } from '@react-three/cannon';
 import { Mesh } from 'three';
 
 import { getTileColor } from '../shared/colors';
+import { config } from '../shared/constants';
 
 import type { TileProps } from './Tile';
 
@@ -17,7 +18,7 @@ export function FadingTiles({ fadingTiles }: { fadingTiles: TileProps[] }) {
 
 function ReactFadingTile({ position, size, index }: TileProps) {
   /** @todo exclude from here, duplicated value. */
-  const height = 10;
+  const height = config.tileHeight;
 
   const boxArgs: Triplet = [size.x, height, size.y];
 

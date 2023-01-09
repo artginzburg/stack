@@ -5,7 +5,7 @@ import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useLocalStorage } from 'usehooks-ts';
 
-import { magicValues } from '../shared/constants';
+import { config, magicValues } from '../shared/constants';
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
 import { round } from '../tools/round';
 import { BaseTile } from './BaseTile';
@@ -104,7 +104,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
       const position = new Vector3(
         cutSizeX ? currentCenter.x + (signX * newSize.x) / 2 : previousTile.position.x,
-        previousTile.position.y + 10,
+        previousTile.position.y + config.tileHeight,
         cutSizeZ ? currentCenter.z + (signZ * newSize.y) / 2 : previousTile.position.z,
       );
 
@@ -121,7 +121,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
     const newCenter = new Vector3(
       previousTile.position.x + diff.x / 2,
-      previousTile.position.y + 10,
+      previousTile.position.y + config.tileHeight,
       previousTile.position.z + diff.z / 2,
     );
 

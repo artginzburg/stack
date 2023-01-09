@@ -2,7 +2,7 @@ import { useThree } from '@react-three/fiber';
 import { useState } from 'react';
 import { Object3D } from 'three';
 
-import { magicValues } from '../shared/constants';
+import { config, magicValues } from '../shared/constants';
 
 import type { PreviousTile } from './types';
 
@@ -17,6 +17,15 @@ export function DirLight({ previousTile }: { previousTile: PreviousTile }) {
 
   const [lightTarget] = useState(() => new Object3D());
 
+  /**
+   * This corrects the shadow light Y position taking Tile Height into account, so that the lighting and shadows work the same for any Tile Height, like both 10 and 300.
+   *
+   * A magic value (by trial and error).
+   *
+   * Lighting was broken when changing tile height. What the hell needs to be done with light Y? For tile height 10, +10 works. For tile height 300, +50 works. Came up with (tileHeight - 10) / 7.25, but it works properly from 1 to 300 tileHeight, and breaks at around 450. But tile height will likely never be set to a value this big, so it's OK for now.
+   */
+  const addedShadowLightYPosition = (config.tileHeight - 10) / 7.25;
+
   return (
     <group
       position-y={Math.max(
@@ -28,7 +37,7 @@ export function DirLight({ previousTile }: { previousTile: PreviousTile }) {
         color={'hsl(0.1, 10%, 95%)'}
         intensity={1}
         castShadow
-        position={[-50, 50 + 10, 50]}
+        position={[-50, 50 + 10 + addedShadowLightYPosition, 50]}
         shadow-mapSize={[2048, 2048]}
         // shadow-bias={-0.0001} // this caused weird artifacts
         target={lightTarget}
