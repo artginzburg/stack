@@ -183,9 +183,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
       <Score index={index} />
       <Canvas
         camera={{
-          fov: 25, // 45
           near: 1,
-          far: 2000,
           position: [-250, 250, -250],
         }}
         orthographic
