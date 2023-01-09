@@ -3,6 +3,14 @@ import { BackSide, Vector2, Vector3 } from 'three';
 
 import { config } from '../shared/constants';
 
+/** @todo easing for the effect fade out */
+const perfectEffectConfig = {
+  /** was `5` in the first version of the remake */
+  borderWidth: 4,
+  /** was `2` in the first version of the remake */
+  animationSpeed: 0.7,
+} as const;
+
 export function PerfectEffects({
   effects,
   setEffects,
@@ -18,7 +26,8 @@ export function PerfectEffects({
             ? (null as any)
             : {
                 ...effect,
-                materialOpacity: effect.materialOpacity - delta * 0.7,
+                materialOpacity:
+                  effect.materialOpacity - delta * perfectEffectConfig.animationSpeed,
               },
         )
         .filter(Boolean),
@@ -40,8 +49,7 @@ export interface PerfectEffectProps {
   materialOpacity: number;
 }
 function PerfectEffect({ position, size, materialOpacity }: PerfectEffectProps) {
-  const borderWidth = 5;
-  const addedSize = borderWidth * 2;
+  const addedSize = perfectEffectConfig.borderWidth * 2;
 
   if (materialOpacity <= 0) {
     return null;
