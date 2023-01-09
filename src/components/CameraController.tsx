@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Vector3 } from 'three';
 
 import { config, magicValues } from '../shared/constants';
-import { easeOutCirc } from '../tools/easing';
+import { easeInOutSineEaseOutCirc } from '../tools/easing';
 
 import type { PreviousTile } from './types';
 
@@ -11,15 +11,15 @@ const cameraConfig: {
   /**
    * A math function for easing the camera animation. For a quick start, you can get them at https://easings.net
    *
-   * I think `easeOutCirc` looks the most like the original game — quick and exponential at the start, but very "prolonged" and linear at the end. Though in the original, the start of the animation seems a little less sharp than in `easeOutCirc`.
+   * I think `easeOutCirc` looks the most like the original game — quick and exponential at the start, but very "prolonged" and linear at the end. Though in the original, the start of the animation seems a little less sharp than in `easeOutCirc`. That's why I mixed with `easeInOutSine`. Looks a lot more like the original now.
    */
   easing: (x: number) => number;
   animationTime: number;
 } = {
   /** was just `ease = (t: number) => t * t * (3.0 - 2.0 * t)` in the first version of the remake */
-  easing: easeOutCirc,
+  easing: easeInOutSineEaseOutCirc,
   /** was `0.5` in the first version of the remake */
-  animationTime: 0.8,
+  animationTime: 1.3,
 } as const;
 
 export function CameraController({
