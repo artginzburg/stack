@@ -6,6 +6,10 @@ import { config } from '../shared/constants';
 
 import type { TileProps } from './Tile';
 
+const fallingTileConfig = {
+  mass: 10,
+} as const;
+
 export function FadingTiles({ fadingTiles }: { fadingTiles: TileProps[] }) {
   return (
     <>
@@ -23,7 +27,7 @@ function ReactFadingTile({ position, size, index }: TileProps) {
   const boxArgs: Triplet = [size.x, height, size.y];
 
   const [ref] = useBox<Mesh>(() => ({
-    mass: 10,
+    mass: fallingTileConfig.mass,
     position: [position.x, index * height, position.z],
     args: boxArgs,
   }));

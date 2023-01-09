@@ -19,6 +19,18 @@ import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
 import { Score } from './Score';
 import { ReactTile, TileProps } from './Tile';
 
+const gameConfig = {
+  physics: {
+    gravityDown: 600,
+    /**
+     * a.k.a. `restitution`
+     *
+     * @default 0
+     */
+    bounciness: 0.1,
+  },
+} as const;
+
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const debug = window.location.search.includes('debug');
 
@@ -210,7 +222,12 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
             lastCube={staticTiles.at(-1)}
           />
         )}
-        <Physics gravity={[0, -400, 0]}>
+        <Physics
+          gravity={[0, -gameConfig.physics.gravityDown, 0]}
+          defaultContactMaterial={{
+            restitution: gameConfig.physics.bounciness,
+          }}
+        >
           <BaseTile />
           {staticTiles.map((tile) => (
             <ReactTile key={tile.index} {...tile} />
