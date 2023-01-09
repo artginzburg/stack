@@ -71,8 +71,8 @@ export function CameraController({
 
     const minimumZoom = 1;
 
-    const breakRoundWidth = 3;
-    const fineTunedWidthDivider = 800;
+    const breakRoundWidth = 10;
+    const fineTunedWidthDivider = 750;
 
     const newZoom =
       Math.round((size.width / fineTunedWidthDivider) * breakRoundWidth) / breakRoundWidth +
