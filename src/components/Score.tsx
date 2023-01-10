@@ -1,6 +1,6 @@
 import { sharedStyleProps } from './Greeting';
 
-export function Score({ index }: { index: number }) {
+export function Score({ index, isEnded }: { index: number; isEnded: boolean }) {
   return (
     <div
       style={{
@@ -13,7 +13,7 @@ export function Score({ index }: { index: number }) {
         top: '2rem',
       }}
     >
-      {index || ''}
+      {isEnded ? Number(index) : index || ''}
     </div>
   );
 }
