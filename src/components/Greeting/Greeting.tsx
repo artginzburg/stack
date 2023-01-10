@@ -3,6 +3,7 @@ import './Greeting.css';
 import { useMemo, useState } from 'react';
 
 import packageJson from '../../../package.json';
+import { HowToPlay } from '../HowToPlay';
 
 export const sharedStyleProps: React.CSSProperties = {
   textAlign: 'center',
@@ -64,6 +65,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
         {' '}
         to start
       </div>
+      <HowToPlay className={className} />
       <GreetingLinks className={className} />
     </>
   );
