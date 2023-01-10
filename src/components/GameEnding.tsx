@@ -14,7 +14,7 @@ export function GameEnding({
   isEnded: boolean;
   isHighScoreNew: boolean;
 }) {
-  const highScore = useReadLocalStorage(LocalStorageKeys.HighScore);
+  const highScore = useReadLocalStorage<number | null>(LocalStorageKeys.HighScore);
 
   if (!isStarted && !isEnded) return null;
   if (isStarted && !isEnded) return null;
@@ -36,19 +36,21 @@ export function GameEnding({
         {' '}
         to restart
       </div>
-      <div
-        className={className}
-        style={{
-          ...sharedStyleProps,
-          letterSpacing: 0,
-          fontStretch: '100%',
+      {isHighScoreNew || highScore ? (
+        <div
+          className={className}
+          style={{
+            ...sharedStyleProps,
+            letterSpacing: 0,
+            fontStretch: '100%',
 
-          fontSize: '2rem',
-          top: `${5 + 2 + 1}rem`, // `5 + 2` is `size + top` of Score.
-        }}
-      >
-        {isHighScoreNew ? 'New high score!' : `Best: ${highScore}`}
-      </div>
+            fontSize: '2rem',
+            top: `${5 + 2 + 1}rem`, // `5 + 2` is `size + top` of Score.
+          }}
+        >
+          {isHighScoreNew ? 'New high score!' : `Best: ${highScore}`}
+        </div>
+      ) : null}
     </>
   );
 }
