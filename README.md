@@ -2,12 +2,12 @@
 <img src="public/logo192.png" width="200" height="200">
 
 # stack
-A Web remake of a popular tower stacking game for mobiles.
+A Web remake of a popular tower stacking [game][original] for mobiles.
 
 <br /><br />
 </div>
 
-Just saw [KonradLinkowski/Stack][threejs-version], and decided to rewrite it from Three.js to React Three Fiber.
+Just saw [KonradLinkowski/Stack][threejs-version], and decided to rewrite it from [Three.js][threejs] to [React Three Fiber][r3f].
 
 > It's my first try at games, and the first glance at 3D from a dev's perspective (tried 3ds Max before, that's all).
 
@@ -30,3 +30,6 @@ Just saw [KonradLinkowski/Stack][threejs-version], and decided to rewrite it fro
 See or add yours in [Issues](https://github.com/artginzburg/stack/issues)
 
 [threejs-version]: https://github.com/KonradLinkowski/Stack
+[original]: https://apps.apple.com/us/app/stack/id1080487957
+[threejs]: https://threejs.org
+[r3f]: https://docs.pmnd.rs/react-three-fiber
