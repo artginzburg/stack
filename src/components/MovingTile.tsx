@@ -69,6 +69,7 @@ export function MovingTile({
     if (Math.abs(mesh.position[axis]) >= startOffset) {
       setDirection((prev) => -prev);
       // Is this `mesh.position.clamp` call necessary? Seems to work the same way without it.
+      // UPD: it is necessary, check on higher `speedOfMovingTile` like 2000.
       mesh.position.clamp(
         new Vector3(-startOffset, Number.NEGATIVE_INFINITY, -startOffset),
         new Vector3(startOffset, Number.POSITIVE_INFINITY, startOffset),
