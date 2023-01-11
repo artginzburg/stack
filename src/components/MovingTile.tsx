@@ -49,21 +49,20 @@ export function MovingTile({
     mesh.position[axis] += addedPosition * direction;
 
     if (autoplay) {
-      if (lastCube) {
-        const autoplayEpsilon = Math.round(addedPosition) / 2 + 0.1;
+      const previousTilePosition =
+        lastCube?.position ??
+        previousTile.position.clone().add(new Vector3(0, config.tileHeight, 0));
 
-        if (
-          nearlyEqual(lastCube.position[axis], mesh.position[axis], autoplayEpsilon + autoplayError)
-        ) {
-          document.getElementsByTagName('canvas')[0].click();
-        }
-      } else {
-        if (
-          Math.round(mesh.position.x) === Math.round(previousTile.position.x) &&
-          Math.round(mesh.position.z) === Math.round(previousTile.position.z)
-        ) {
-          document.getElementsByTagName('canvas')[0].click();
-        }
+      const autoplayEpsilon = Math.round(addedPosition) / 2 + 0.1;
+
+      if (
+        nearlyEqual(
+          previousTilePosition[axis],
+          mesh.position[axis],
+          autoplayEpsilon + autoplayError,
+        )
+      ) {
+        document.getElementsByTagName('canvas')[0].click();
       }
     }
 
