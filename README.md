@@ -27,10 +27,6 @@ Just saw [KonradLinkowski/Stack][threejs-version], and decided to rewrite it fro
 
 ## Plans
 
-- Eliminate all `useRef()`s.
-- Use auto-play like a real test — speed it up, add to `npm test`, plus CI.
-
-> And everything else that [Konrad][threejs-version-author] pointed out in Todo, of course.
+See or add yours in [Issues](https://github.com/artginzburg/stack/issues)
 
 [threejs-version]: https://github.com/KonradLinkowski/Stack
-[threejs-version-author]: https://github.com/KonradLinkowski
