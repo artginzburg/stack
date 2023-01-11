@@ -1,4 +1,5 @@
 import { useFrame } from '@react-three/fiber';
+import { useControls } from 'leva';
 import { useEffect, useState } from 'react';
 import { Mesh, Vector3 } from 'three';
 
@@ -14,13 +15,26 @@ export function MovingTile({
   previousTile,
   autoplay,
   lastCube,
+  speedOfMovingTile,
 }: {
   index: number;
   movingTileMeshRef: React.RefObject<Mesh>;
   previousTile: PreviousTile;
   autoplay: boolean | undefined;
   lastCube: TileProps | undefined;
+  speedOfMovingTile: number;
 }) {
+  const { autoplayError } = useControls({
+    /**
+     * 0 — no error, will score more points than a human can wait to count.
+     * 25 - will score ~8 points.
+     * 50 - will score ~3 points.
+     */
+    autoplayError: {
+      value: 0,
+      step: 1,
+    },
+  });
   const defaultTileSize = 100;
   const startOffset = defaultTileSize + defaultTileSize / 4;
   const [direction, setDirection] = useState(-1);
@@ -31,17 +45,11 @@ export function MovingTile({
     const mesh = movingTileMeshRef.current;
 
     const axis = index % 2 === 0 ? 'x' : 'z';
-    const addedPosition = delta * 157;
+    const addedPosition = delta * speedOfMovingTile;
     mesh.position[axis] += addedPosition * direction;
 
     if (autoplay) {
       if (lastCube) {
-        /**
-         * 0 — no error, will score more points than a human can wait to count.
-         * 25 - will score ~8 points.
-         * 50 - will score ~3 points.
-         */
-        const autoplayError = 0;
         const autoplayEpsilon = Math.round(addedPosition) / 2 + 0.1;
 
         if (

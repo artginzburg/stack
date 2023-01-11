@@ -1,6 +1,7 @@
 import { Physics } from '@react-three/cannon';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import { useControls } from 'leva';
 import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useLocalStorage } from 'usehooks-ts';
@@ -32,6 +33,14 @@ const gameConfig = {
 } as const;
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
+  const { invertGravity, speedOfMovingTile } = useControls({
+    invertGravity: false,
+    speedOfMovingTile: {
+      value: 157,
+      step: 1,
+    },
+  });
+
   const debug = window.location.search.includes('debug');
 
   const [isStarted, setIsStarted] = useState(false);
@@ -220,10 +229,15 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
             previousTile={previousTile}
             autoplay={autoplay}
             lastCube={staticTiles.at(-1)}
+            speedOfMovingTile={speedOfMovingTile}
           />
         )}
         <Physics
-          gravity={[0, -gameConfig.physics.gravityDown, 0]}
+          gravity={[
+            0,
+            invertGravity ? gameConfig.physics.gravityDown : -gameConfig.physics.gravityDown,
+            0,
+          ]}
           defaultContactMaterial={{
             restitution: gameConfig.physics.bounciness,
           }}
