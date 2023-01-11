@@ -62,7 +62,7 @@ export function MovingTile({
           autoplayEpsilon + autoplayError,
         )
       ) {
-        document.getElementsByTagName('canvas')[0].click();
+        state.gl.domElement.click();
       }
     }
 
