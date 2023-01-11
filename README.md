@@ -1,6 +1,11 @@
-# stack
+<div align="center">
+<img src="public/logo192.png" width="200" height="200">
 
+# stack
 A Web remake of a popular tower stacking game for mobiles.
+
+<br /><br />
+</div>
 
 Just saw [KonradLinkowski/Stack][threejs-version], and decided to rewrite it from Three.js to React Three Fiber.
 
