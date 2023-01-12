@@ -4,7 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { useControls } from 'leva';
 import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
-import { useLocalStorage } from 'usehooks-ts';
+import { useEventListener, useLocalStorage } from 'usehooks-ts';
 
 import { config, magicValues } from '../shared/constants';
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
@@ -198,6 +198,13 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     cutBox();
     moveUp();
   }
+
+  useEventListener('keydown', (event) => {
+    if (event.repeat) return;
+    if (event.code === 'Space') {
+      act();
+    }
+  });
 
   return (
     <div style={{ height: '100vh', background: autoplay ? '#1f0014' : '#000' }}>
