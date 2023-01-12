@@ -49,9 +49,7 @@ export function MovingTile({
     mesh.position[axis] += addedPosition * direction;
 
     if (autoplay) {
-      const previousTilePosition =
-        lastCube?.position ??
-        previousTile.position.clone().add(new Vector3(0, config.tileHeight, 0));
+      const previousTilePosition = lastCube?.position ?? previousTile.position;
 
       const autoplayEpsilon = Math.round(addedPosition) / 2 + 0.1;
 
