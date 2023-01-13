@@ -6,6 +6,7 @@ import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useEventListener, useLocalStorage } from 'usehooks-ts';
 
+import { useStatistics } from '../features/stats';
 import { config, magicValues } from '../shared/constants';
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
 import { round } from '../tools/round';
@@ -41,6 +42,15 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     },
   });
 
+  const {
+    updateAllStatsOnCutBox,
+    updateAllStatsOnGameStart,
+    updateAllStatsOnLose,
+    updateAllStatsOnBeatingHighScore,
+
+    resetThisGameStats,
+  } = useStatistics();
+
   const debug = window.location.search.includes('debug');
 
   const [isStarted, setIsStarted] = useState(false);
@@ -53,6 +63,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     // Can be tested by removing `highScore` localStorage entry, dropping the box once, and looking in the console. It will have a related warning with a stack trace pointing here.
     if (!isHighScoreNew) {
       setIsHighScoreNew(true);
+      updateAllStatsOnBeatingHighScore();
     }
     setHighScore(index);
   }
@@ -161,6 +172,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         index,
       },
     ]);
+
+    updateAllStatsOnCutBox(errorPercentage, isConsideredPerfect);
   }
 
   function moveUp() {
@@ -181,6 +194,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   function lose() {
     setIsEnded(true);
     setIndex((prev) => prev - 1);
+    updateAllStatsOnLose();
   }
 
   function reset() {
@@ -191,6 +205,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     setStaticTiles([]);
     setEffects([]);
     setIsHighScoreNew(false);
+    resetThisGameStats();
   }
 
   function act() {
@@ -200,6 +215,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     }
     if (!isStarted) {
       setIsStarted(true);
+      updateAllStatsOnGameStart();
       return;
     }
     cutBox();
