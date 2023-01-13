@@ -49,7 +49,11 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   const [highScore, setHighScore] = useLocalStorage(LocalStorageKeys.HighScore, index);
   const [isHighScoreNew, setIsHighScoreNew] = useState(false);
   if (index > highScore) {
-    setIsHighScoreNew(true);
+    // TODO! don't update in render (https://reactjs.org/link/setstate-in-render)
+    // Can be tested by removing `highScore` localStorage entry, dropping the box once, and looking in the console. It will have a related warning with a stack trace pointing here.
+    if (!isHighScoreNew) {
+      setIsHighScoreNew(true);
+    }
     setHighScore(index);
   }
   const defaultPreviousTile: Pick<TileProps, 'position' | 'size'> = useMemo(
@@ -107,9 +111,12 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     const errorX = absDiffX / previousTile.size.x;
     const errorZ = absDiffZ / previousTile.size.y;
 
-    // if error is less than arbitrary epsilon than don't cut the tile at all
+    const errorPercentage = errorX + errorZ;
+
+    /** if error is less than arbitrary epsilon than don't cut the tile at all */
     const eps = 0.05;
-    if (errorX <= eps && errorZ <= eps) {
+    const isConsideredPerfect = errorPercentage <= eps;
+    if (isConsideredPerfect) {
       diff.x = 0;
       diff.z = 0;
       newSize.x += absDiffX;
