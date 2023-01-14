@@ -6,6 +6,7 @@ import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useEventListener, useLocalStorage } from 'usehooks-ts';
 
+import { ComboConfig, getNewSizeAndPositionOnComboStreak } from '../features/combos';
 import { useStatistics } from '../features/stats';
 import { config, magicValues } from '../shared/constants';
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
@@ -20,6 +21,7 @@ import { MovingTile } from './MovingTile';
 import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
 import { Score } from './Score';
 import { ReactTile, TileProps } from './Tile';
+import { PreviousTile } from './types';
 
 const gameConfig = {
   physics: {
@@ -69,7 +71,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     }
     setHighScore(index);
   }
-  const defaultPreviousTile: Pick<TileProps, 'position' | 'size'> = useMemo(
+  const defaultPreviousTile: PreviousTile = useMemo(
     () => ({
       size: new Vector2(100, 100),
       position: new Vector3(),
@@ -166,14 +168,24 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
       previousTile.position.z + diff.z / 2,
     );
 
-    setStaticTiles((prev) => [
-      ...prev,
-      {
-        position: newCenter,
-        size: newSize,
-        index,
-      },
-    ]);
+    const newStaticTile: TileProps = {
+      position: newCenter,
+      size: newSize,
+      index,
+    };
+
+    /** "possibly" since it is not confirmed until `isConsideredPerfect` is checked. */
+    const possiblyNewCurrentCombo = thisGameStats.currentCombo + 1;
+    const isComboStreak =
+      isConsideredPerfect && possiblyNewCurrentCombo > ComboConfig.streak.startAfter;
+    const newOrEnlargedStaticTile = isComboStreak
+      ? {
+          ...newStaticTile,
+          ...getNewSizeAndPositionOnComboStreak(defaultPreviousTile, newStaticTile),
+        }
+      : newStaticTile;
+
+    setStaticTiles((prev) => [...prev, newOrEnlargedStaticTile]);
 
     updateAllStatsOnCutBox(errorPercentage, isConsideredPerfect);
   }
@@ -183,13 +195,14 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   }
 
   function spawnEffect(position: Vector3, size: Vector2) {
+    const newCurrentCombo = thisGameStats.currentCombo + 1;
     setEffects((prev) => [
       ...prev,
       {
         position,
         size,
         materialOpacity: 1,
-        currentCombo: thisGameStats.currentCombo + 1,
+        currentCombo: newCurrentCombo,
       },
     ]);
   }

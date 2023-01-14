@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Fragment } from 'react';
 import { BackSide, Vector2, Vector3 } from 'three';
 
+import { ComboConfig } from '../features/combos';
 import { config } from '../shared/constants';
 import { easeInOutSineEaseOutCirc } from '../tools/easing';
 import { PlaneBorder } from './PlaneBorder';
@@ -80,17 +81,11 @@ function ComboEffect({ position, size, materialOpacity, currentCombo }: PerfectE
     return null;
   }
 
-  /** @default 4 */
-  const startComboAt = 4;
-  /** @default 7 */
-  const endComboAt = 7;
-
-  if (currentCombo < startComboAt || currentCombo > endComboAt) {
-    // TODO combo continued after `endComboAt` should increase the size of the previous tile on each perfect drop.
+  if (currentCombo < ComboConfig.effect.startAt || currentCombo > ComboConfig.effect.endAt) {
     return null;
   }
 
-  const currentComboEffectStage = currentCombo - (startComboAt - 1);
+  const currentComboEffectStage = currentCombo - (ComboConfig.effect.startAt - 1);
 
   const stagesIncludingAllPreviousAndCurrent = [...Array(currentComboEffectStage)].map(
     (el, i) => i + 1,
