@@ -43,6 +43,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   });
 
   const {
+    thisGameStats,
+
     updateAllStatsOnCutBox,
     updateAllStatsOnGameStart,
     updateAllStatsOnLose,
@@ -187,6 +189,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         position,
         size,
         materialOpacity: 1,
+        currentCombo: thisGameStats.currentCombo + 1,
       },
     ]);
   }

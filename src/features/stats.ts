@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
@@ -16,6 +16,7 @@ const defaultStats = {
   /** Times the player has beaten his own best score. */
   beatenHighScore: 0,
 };
+// export type Statistic = typeof defaultStats;
 
 export const statisticMethods = {
   getUnfinishedGames(stats: typeof defaultStats) {

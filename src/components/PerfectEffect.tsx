@@ -1,7 +1,11 @@
+import { Plane } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
+import { Fragment } from 'react';
 import { BackSide, Vector2, Vector3 } from 'three';
 
 import { config } from '../shared/constants';
+import { easeInOutSineEaseOutCirc } from '../tools/easing';
+import { PlaneBorder } from './PlaneBorder';
 
 /** @todo easing for the effect fade out */
 const perfectEffectConfig = {
@@ -37,7 +41,10 @@ export function PerfectEffects({
   return (
     <>
       {effects.map((effect) => (
-        <PerfectEffect key={effect.position.y} {...effect} />
+        <Fragment key={effect.position.y}>
+          <PerfectEffect {...effect} />
+          <ComboEffect {...effect} />
+        </Fragment>
       ))}
     </>
   );
@@ -47,21 +54,90 @@ export interface PerfectEffectProps {
   position: Vector3;
   size: Vector2;
   materialOpacity: number;
+  currentCombo: number;
 }
 function PerfectEffect({ position, size, materialOpacity }: PerfectEffectProps) {
-  const addedSize = perfectEffectConfig.borderWidth * 2;
-
   if (materialOpacity <= 0) {
     return null;
   }
 
+  const addedSize = perfectEffectConfig.borderWidth * 2;
+
   return (
-    <mesh
+    <Plane
+      args={[size.x + addedSize, size.y + addedSize]}
       position={[position.x, position.y - config.tileHeight / 2, position.z]}
       rotation-x={Math.PI / 2}
     >
-      <planeGeometry args={[size.x + addedSize, size.y + addedSize]} />
       <meshBasicMaterial color="#fff" side={BackSide} transparent opacity={materialOpacity} />
-    </mesh>
+    </Plane>
+  );
+}
+
+/** @todo exclude into a separate file. */
+function ComboEffect({ position, size, materialOpacity, currentCombo }: PerfectEffectProps) {
+  if (materialOpacity <= 0) {
+    return null;
+  }
+
+  /** @default 4 */
+  const startComboAt = 4;
+  /** @default 7 */
+  const endComboAt = 7;
+
+  if (currentCombo < startComboAt || currentCombo > endComboAt) {
+    // TODO combo continued after `endComboAt` should increase the size of the previous tile on each perfect drop.
+    return null;
+  }
+
+  const currentComboEffectStage = currentCombo - (startComboAt - 1);
+
+  const stagesIncludingAllPreviousAndCurrent = [...Array(currentComboEffectStage)].map(
+    (el, i) => i + 1,
+  );
+
+  return (
+    <>
+      {stagesIncludingAllPreviousAndCurrent.map((stage) => {
+        /**
+         * If decreased — the delay between stages will increase.
+         * @todo choose a better name for this variable.
+         */
+        const speedOfDelayBetweenStages = 10;
+        const delayFactor = (1 + speedOfDelayBetweenStages) / (stage + speedOfDelayBetweenStages);
+
+        /** takes the largest side as max. */
+        const maxAddedSize = size.x > size.y ? size.x : size.y;
+
+        const addedSize =
+          maxAddedSize * easeInOutSineEaseOutCirc(1 - materialOpacity / delayFactor);
+
+        if (Number.isNaN(addedSize)) {
+          // In this case, the stage should not be displayed at all, because it's delayed. If this check were to be uncommented — there would be errors in console.
+          return null;
+        }
+
+        const comboEffectWidth = (perfectEffectConfig.borderWidth * 2) / stage;
+
+        const preventTextureOverlayGlitch = stage * 0.01;
+
+        return (
+          <PlaneBorder
+            renderOrder={stage} // setting `renderOrder` to specify how the semi-transparent meshes should blend. Without this, they will blend in a way determined by the actual planes order inside PlaneBorder (which looks strange physics-wise), whilst I want them to blend as if PlaneBorder is a single mesh. TODO make PlaneBorder a real single mesh (e.g. an instanced mesh, or a mesh with multiple geometries).
+            args={[size.x + addedSize, size.y + addedSize]}
+            position={[
+              position.x,
+              position.y - config.tileHeight / 2 + preventTextureOverlayGlitch,
+              position.z,
+            ]}
+            rotation-x={Math.PI / 2}
+            borderWidth={comboEffectWidth}
+            key={stage}
+          >
+            <meshBasicMaterial color="#fff" side={BackSide} transparent opacity={materialOpacity} />
+          </PlaneBorder>
+        );
+      })}
+    </>
   );
 }
