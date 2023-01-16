@@ -22,6 +22,14 @@ export function getNewSizeAndPositionOnComboStreak(
   defaultPreviousTile: PreviousTile,
   newStaticTile: TileProps,
 ) {
+  //! Problem: when the size has place to increase in more than 2 directions — it messes up the calculations, and the end position ends up mismatching the size (or, simply put, out of bounds).
+
+  //* Size sometimes increases in a direction that cannot handle the increase fully.
+
+  //* Suggestion: rewrite this algorithm and make it much simpler. Divide it into steps (all different functions):
+  //* 1. Determine which direction should we increase size to — x-, x+, y-, y+.
+  //* 2. Determine how much space does this direction have left.
+
   const sizeBonusOnComboStreak =
     defaultPreviousTile.size.x * ComboConfig.streak.sizeBonusPercentage;
 
