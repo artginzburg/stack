@@ -17,11 +17,10 @@ export namespace ComboConfig {
   } as const;
 }
 
-/** @todo add animation of size increasing. */
 export function getNewSizeAndPositionOnComboStreak(
   defaultPreviousTile: PreviousTile,
   newStaticTile: TileProps,
-) {
+): Pick<TileProps, 'size' | 'position' | 'addedPositionSign'> {
   //* 1. Determine which direction should we increase size to: x-, x+, y-, y+.
   //* 2. Determine how much space does this direction have left.
   //* 3. Add this space to the size, or the minimum bonus if it's smaller than leftover space.
@@ -43,6 +42,7 @@ export function getNewSizeAndPositionOnComboStreak(
   return {
     size: sizeWithBonus,
     position: correctedPosition,
+    addedPositionSign: direction.sign,
   };
 }
 

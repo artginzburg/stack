@@ -178,10 +178,11 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     const possiblyNewCurrentCombo = thisGameStats.currentCombo + 1;
     const isComboStreak =
       isConsideredPerfect && possiblyNewCurrentCombo > ComboConfig.streak.startAfter;
-    const newOrEnlargedStaticTile = isComboStreak
+    const newOrEnlargedStaticTile: TileProps = isComboStreak
       ? {
           ...newStaticTile,
           ...getNewSizeAndPositionOnComboStreak(defaultPreviousTile, newStaticTile),
+          createdAt: Date.now(),
         }
       : newStaticTile;
 
@@ -289,8 +290,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
           }}
         >
           <BaseTile />
-          {staticTiles.map((tile) => (
-            <ReactTile key={tile.index} {...tile} />
+          {staticTiles.map((tile, tileArrIndex) => (
+            <ReactTile key={tile.index} {...tile} prevSize={staticTiles[tileArrIndex - 1]?.size} />
           ))}
           <FadingTiles fadingTiles={fadingTiles} />
         </Physics>

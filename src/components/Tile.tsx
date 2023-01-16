@@ -1,29 +1,69 @@
 import { Triplet, useBox } from '@react-three/cannon';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Mesh, Vector2, Vector3 } from 'three';
 
+import {
+  AnimatedTileProps,
+  getAnimatedTileAddedPosition,
+  getAnimatedTileSize,
+  useTileGrowingAnimation,
+} from '../features/animatedGrowingTile';
 import { getTileColor } from '../shared/colors';
 import { config } from '../shared/constants';
 
-export interface TileProps {
+export interface TileProps extends AnimatedTileProps {
   position: Vector3;
   size: Vector2;
   index: number;
 }
-export function ReactTile({ position, size, index }: TileProps) {
+/** @todo remove "React" from name. */
+export function ReactTile({
+  position,
+  size,
+  index,
+  createdAt,
+  prevSize,
+  addedPositionSign,
+}: TileProps & { prevSize: TileProps['size'] | undefined }) {
   if (process.env.NODE_ENV !== 'production') {
     // I know for sure that NODE_ENV is never going to change during one run of the game script, so it's OK to have a conditional hook:
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useRunDevOnlyTestsForTile({ position, size, index });
   }
 
-  const boxArgs: Triplet = [size.x, config.tileHeight, size.y];
+  const { shouldAnimate, addedSize, sizeDifference } = useTileGrowingAnimation({
+    createdAt,
+    prevSize,
+    size,
+    addedPositionSign,
+  });
 
-  const [ref] = useBox<Mesh>(() => ({
-    position: [position.x, index * config.tileHeight, position.z],
-    type: 'Static',
-    args: boxArgs,
-  }));
+  const animatedTileSize = getAnimatedTileSize(shouldAnimate, prevSize, addedSize);
+
+  const boxArgs: Triplet = [
+    animatedTileSize?.x ?? size.x,
+    config.tileHeight,
+    animatedTileSize?.y ?? size.y,
+  ];
+
+  const animatedTileAddedPosition = useMemo(
+    () => getAnimatedTileAddedPosition(addedPositionSign, sizeDifference, addedSize),
+    [addedPositionSign, addedSize, sizeDifference],
+  );
+
+  const [ref] = useBox<Mesh>(
+    () => ({
+      position: [
+        position.x + animatedTileAddedPosition.x,
+        index * config.tileHeight,
+        position.z + animatedTileAddedPosition.y,
+      ],
+      type: 'Static',
+      args: boxArgs,
+    }),
+    undefined,
+    [animatedTileAddedPosition], // `position` can be omitted here, since it's static, but it better be included just to be safe.
+  );
 
   return (
     <mesh ref={ref} castShadow receiveShadow>

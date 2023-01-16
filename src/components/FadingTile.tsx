@@ -20,6 +20,7 @@ export function FadingTiles({ fadingTiles }: { fadingTiles: TileProps[] }) {
   );
 }
 
+/** @todo rename to FallingTile, remove "React" from name. */
 function ReactFadingTile({ position, size, index }: TileProps) {
   /** @todo exclude from here, duplicated value. */
   const height = config.tileHeight;
