@@ -33,3 +33,5 @@ See or add yours in [Issues](https://github.com/artginzburg/stack/issues)
 [original]: https://apps.apple.com/us/app/stack/id1080487957
 [threejs]: https://threejs.org
 [r3f]: https://docs.pmnd.rs/react-three-fiber
+
+![](./resources/preview.png)
