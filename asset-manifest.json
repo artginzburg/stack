@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/stack/static/css/main.aefd0bbc.css",
-    "main.js": "/stack/static/js/main.d80c2462.js",
+    "main.js": "/stack/static/js/main.de82f34f.js",
     "static/js/27.08a32db8.chunk.js": "/stack/static/js/27.08a32db8.chunk.js",
     "service-worker.js": "/stack/service-worker.js",
     "static/media/illustration_game-over.svg": "/stack/static/media/illustration_game-over.daebaf4dea6dfafda64e0ab146ec3f29.svg",
@@ -11,6 +11,6 @@
   },
   "entrypoints": [
     "static/css/main.aefd0bbc.css",
-    "static/js/main.d80c2462.js"
+    "static/js/main.de82f34f.js"
   ]
 }
