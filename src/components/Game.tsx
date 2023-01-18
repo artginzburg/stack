@@ -1,4 +1,4 @@
-import { Physics } from '@react-three/cannon';
+import { Debug, Physics } from '@react-three/cannon';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useControls } from 'leva';
@@ -13,6 +13,7 @@ import { LocalStorageKeys } from '../shared/LocalStorageKeys';
 import { round } from '../tools/round';
 import { BaseTile } from './BaseTile';
 import { CameraController } from './CameraController';
+import { ConditionalWrapper } from './ConditionalWrapper';
 import { DirLight } from './DirLight';
 import { FadingTiles } from './FadingTile';
 import { GameEnding } from './GameEnding';
@@ -36,11 +37,15 @@ const gameConfig = {
 } as const;
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
-  const { invertGravity, speedOfMovingTile } = useControls({
+  const { invertGravity, speedOfMovingTile, debugPhysics } = useControls({
     invertGravity: false,
     speedOfMovingTile: {
       value: 157,
       step: 1,
+    },
+    debugPhysics: {
+      label: 'Debug Physics',
+      value: false,
     },
   });
 
@@ -289,11 +294,17 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
             restitution: gameConfig.physics.bounciness,
           }}
         >
-          <BaseTile />
-          {staticTiles.map((tile, tileArrIndex) => (
-            <ReactTile key={tile.index} {...tile} prevSize={staticTiles[tileArrIndex - 1]?.size} />
-          ))}
-          <FadingTiles fadingTiles={fadingTiles} />
+          <ConditionalWrapper condition={debugPhysics} Wrapper={Debug}>
+            <BaseTile />
+            {staticTiles.map((tile, tileArrIndex) => (
+              <ReactTile
+                key={tile.index}
+                {...tile}
+                prevSize={staticTiles[tileArrIndex - 1]?.size}
+              />
+            ))}
+            <FadingTiles fadingTiles={fadingTiles} />
+          </ConditionalWrapper>
         </Physics>
         <PerfectEffects effects={effects} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
