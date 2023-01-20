@@ -91,6 +91,27 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
   const previousTile = staticTiles.at(-1) ?? defaultPreviousTile;
 
+  //#region Performance Optimization — prevents rendering old tiles.
+  // TODO render only visible tiles, and zoom out smoothly on game end so that the player would not wait too see the full zoom out, so that his device is not overloaded with the rendering. Currently, on game end, all the tiles that were hidden become visible, which can put a great deal of stress on the user's device if his score is very high like 5000.
+  const shouldSliceForOptimization = isStarted && !isEnded;
+  /**
+   * I'm letting this much show because some users may play from a device like iPad Pro 12.9", in that mode when the screen is split between two applications, and that's when even 30 tiles would not be enough.
+   *
+   * It does not really matter how much if it's less than 100, because most devices today can hold up to 1000 tiles rendered simultaneously.
+   */
+  const howMuchToShowAfterCroppingForOptimization = 40;
+  const staticTilesPossiblySliced = shouldSliceForOptimization
+    ? staticTiles.slice(-howMuchToShowAfterCroppingForOptimization)
+    : staticTiles;
+  const fadingTilesPossiblySliced = shouldSliceForOptimization
+    ? fadingTiles.slice(-howMuchToShowAfterCroppingForOptimization)
+    : fadingTiles;
+  /** @todo Probably, the effects would not suffer if they're always sliced, no matter the game condition. But slicing them is overall not necessary, since the old ones are filtered out inside the `PerfectEffects` function later. */
+  const effectsPossiblySliced = shouldSliceForOptimization
+    ? effects.slice(-howMuchToShowAfterCroppingForOptimization)
+    : effects;
+  //#endregion
+
   function cutBox() {
     if (!movingTileMeshRef.current) return;
 
@@ -296,17 +317,17 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         >
           <ConditionalWrapper condition={debugPhysics} Wrapper={Debug}>
             <BaseTile />
-            {staticTiles.map((tile, tileArrIndex) => (
+            {staticTilesPossiblySliced.map((tile, tileArrIndex) => (
               <ReactTile
                 key={tile.index}
                 {...tile}
-                prevSize={staticTiles[tileArrIndex - 1]?.size}
+                prevSize={staticTilesPossiblySliced[tileArrIndex - 1]?.size}
               />
             ))}
-            <FadingTiles fadingTiles={fadingTiles} />
+            <FadingTiles fadingTiles={fadingTilesPossiblySliced} />
           </ConditionalWrapper>
         </Physics>
-        <PerfectEffects effects={effects} setEffects={setEffects} />
+        <PerfectEffects effects={effectsPossiblySliced} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
       </Canvas>
       <GameEnding isStarted={isStarted} isEnded={isEnded} isHighScoreNew={isHighScoreNew} />
