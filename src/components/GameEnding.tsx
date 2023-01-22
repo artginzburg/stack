@@ -2,6 +2,7 @@ import './Greeting/Greeting.css';
 
 import { useReadLocalStorage } from 'usehooks-ts';
 
+import { useTheme } from '../contexts/ThemeContext';
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
 import { sharedStyleProps } from './Greeting';
 
@@ -14,6 +15,8 @@ export function GameEnding({
   isEnded: boolean;
   isHighScoreNew: boolean;
 }) {
+  const { theme } = useTheme();
+
   const highScore = useReadLocalStorage<number | null>(LocalStorageKeys.HighScore);
 
   if (!isStarted && !isEnded) return null;
@@ -27,6 +30,7 @@ export function GameEnding({
         className={className + ' tapOrClickBefore'}
         style={{
           ...sharedStyleProps,
+          color: theme.lightElements,
           animationDuration: '0.25s',
           fontSize: '1rem',
 
@@ -41,6 +45,7 @@ export function GameEnding({
           className={className}
           style={{
             ...sharedStyleProps,
+            color: theme.lightElements,
             letterSpacing: 0,
             fontStretch: '100%',
 

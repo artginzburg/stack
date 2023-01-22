@@ -1,7 +1,7 @@
 import { Triplet, useBox } from '@react-three/cannon';
 import { Mesh } from 'three';
 
-import { getTileColor } from '../shared/colors';
+import { useTheme } from '../contexts/ThemeContext';
 import { config } from '../shared/constants';
 
 import type { TileProps } from './Tile';
@@ -22,6 +22,8 @@ export function FadingTiles({ fadingTiles }: { fadingTiles: TileProps[] }) {
 
 /** @todo rename to FallingTile, remove "React" from name. */
 function ReactFadingTile({ position, size, index }: TileProps) {
+  const { theme } = useTheme();
+
   /** @todo exclude from here, duplicated value. */
   const height = config.tileHeight;
 
@@ -35,7 +37,7 @@ function ReactFadingTile({ position, size, index }: TileProps) {
 
   return (
     <mesh ref={ref} castShadow receiveShadow>
-      <meshPhongMaterial color={getTileColor(index)} />
+      <meshPhongMaterial color={theme.tile(index)} />
       <boxGeometry args={boxArgs} />
     </mesh>
   );

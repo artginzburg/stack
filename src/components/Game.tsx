@@ -6,8 +6,10 @@ import { useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useEventListener, useLocalStorage } from 'usehooks-ts';
 
+import { useTheme } from '../contexts/ThemeContext';
 import { ComboConfig, getNewSizeAndPositionOnComboStreak } from '../features/combos';
 import { useStatistics } from '../features/stats';
+import { themes } from '../features/themes';
 import { config, magicValues } from '../shared/constants';
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
 import { round } from '../tools/round';
@@ -37,6 +39,8 @@ const gameConfig = {
 } as const;
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
+  const { theme, setThemeName } = useTheme();
+
   const { invertGravity, speedOfMovingTile, debugPhysics } = useControls({
     invertGravity: false,
     speedOfMovingTile: {
@@ -46,6 +50,11 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     debugPhysics: {
       label: 'Debug Physics',
       value: false,
+    },
+    theme: {
+      value: theme.name,
+      onChange: setThemeName,
+      options: themes.map((themeEl) => themeEl.name),
     },
   });
 
@@ -273,7 +282,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   });
 
   return (
-    <div style={{ height: '100vh', background: autoplay ? '#1f0014' : '#000' }}>
+    <div style={{ height: '100vh', background: autoplay ? '#1f0014' : theme.background(index) }}>
       <Greeting index={index} isStarted={isStarted} />
       <Score index={index} isEnded={isEnded} />
       <Canvas

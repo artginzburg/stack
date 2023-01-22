@@ -2,13 +2,13 @@ import { Triplet, useBox } from '@react-three/cannon';
 import { useMemo, useState } from 'react';
 import { Mesh, Vector2, Vector3 } from 'three';
 
+import { useTheme } from '../contexts/ThemeContext';
 import {
   AnimatedTileProps,
   getAnimatedTileAddedPosition,
   getAnimatedTileSize,
   useTileGrowingAnimation,
 } from '../features/animatedGrowingTile';
-import { getTileColor } from '../shared/colors';
 import { config } from '../shared/constants';
 
 export interface TileProps extends AnimatedTileProps {
@@ -30,6 +30,8 @@ export function ReactTile({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useRunDevOnlyTestsForTile({ position, size, index });
   }
+
+  const { theme } = useTheme();
 
   const { shouldAnimate, addedSize, sizeDifference } = useTileGrowingAnimation({
     createdAt,
@@ -67,7 +69,7 @@ export function ReactTile({
 
   return (
     <mesh ref={ref} castShadow receiveShadow>
-      <meshPhongMaterial color={getTileColor(index)} />
+      <meshPhongMaterial color={theme.tile(index)} />
       <boxGeometry args={boxArgs} />
     </mesh>
   );

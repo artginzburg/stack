@@ -2,6 +2,7 @@ import { Leva, useControls } from 'leva';
 import { useEventListener } from 'usehooks-ts';
 
 import { Game } from './components/Game';
+import { ThemeInitializer } from './contexts/ThemeContext';
 
 function App() {
   const [{ autoplay }, set] = useControls(() => ({
@@ -25,7 +26,9 @@ function App() {
         hideCopyButton
         hidden={!isNotProduction}
       />
-      <Game autoplay={autoplay} />
+      <ThemeInitializer>
+        <Game autoplay={autoplay} />
+      </ThemeInitializer>
     </>
   );
 }
