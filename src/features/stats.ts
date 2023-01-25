@@ -3,6 +3,23 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
 
+import gameanalytics, { GameAnalytics } from 'gameanalytics';
+
+function initializeAnalytics() {
+  GameAnalytics.setEnabledInfoLog(true);
+  GameAnalytics.setEnabledVerboseLog(true);
+
+  GameAnalytics.configureBuild('0.10');
+
+  // Configure available events here
+
+  GameAnalytics.initialize(
+    '70494f8f49e34f165baf50886930dede',
+    'b111c829ec259194f8f7a046fa4cf57d3c440d2a',
+  );
+}
+initializeAnalytics();
+
 const defaultStats = {
   errorPercentageAverage: 0,
   perfects: 0,
@@ -56,6 +73,13 @@ export function useStatistics() {
         totalScore: prev.totalScore + 1,
       };
     });
+    // GameAnalytics.addProgressionEvent(
+    //   gameanalytics.EGAProgressionStatus.Complete,
+    //   'world01',
+    //   undefined,
+    //   undefined,
+    //   thisGameStats.totalScore + 1,
+    // );
   }
   function updateAllStatsOnGameStart() {
     setAllStats((prev) => ({
@@ -63,6 +87,7 @@ export function useStatistics() {
       gamesStarted: prev.gamesStarted + 1,
       currentCombo: defaultStats.currentCombo,
     }));
+    GameAnalytics.addProgressionEvent(gameanalytics.EGAProgressionStatus.Start, 'world01');
   }
   function updateAllStatsOnLose() {
     setAllStats((prev) => ({
@@ -71,6 +96,13 @@ export function useStatistics() {
       errorPercentageAverage: (prev.errorPercentageAverage + 1) / 2,
       gamesEnded: prev.gamesEnded + 1,
     }));
+    GameAnalytics.addProgressionEvent(
+      gameanalytics.EGAProgressionStatus.Fail,
+      'world01',
+      undefined,
+      undefined,
+      thisGameStats.totalScore + 1,
+    );
   }
   function updateAllStatsOnBeatingHighScore() {
     setAllStats((prev) => ({ ...prev, beatenHighScore: prev.beatenHighScore + 1 }));

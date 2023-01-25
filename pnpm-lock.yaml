@@ -12,6 +12,7 @@ specifiers:
   '@types/react': ^18.0.26
   '@types/react-dom': ^18.0.10
   '@types/three': ^0.148.0
+  gameanalytics: ^4.4.5
   leva: ^0.9.34
   react: ^18.2.0
   react-dom: ^18.2.0
@@ -32,6 +33,7 @@ dependencies:
   '@types/node': 16.18.11
   '@types/react': 18.0.26
   '@types/react-dom': 18.0.10
+  gameanalytics: 4.4.5
   leva: 0.9.34_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -5686,6 +5688,10 @@ packages:
 
   /functions-have-names/1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
+    dev: false
+
+  /gameanalytics/4.4.5:
+    resolution: {integrity: sha512-o+UbfOem0o4hym4OhSu8ZsvZjtVeZhS2e91egyWJGzg57Ew8jzumxrgBVk6LU9GBa8tzXPbZat/SZgLrM+7KJw==}
     dev: false
 
   /gensync/1.0.0-beta.2:
