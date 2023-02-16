@@ -3,6 +3,7 @@ import './Greeting/Greeting.css';
 import { useReadLocalStorage } from 'usehooks-ts';
 
 import { LocalStorageKeys } from '../shared/LocalStorageKeys';
+import { tapOrClickBefore } from '../shared/texts';
 import { sharedStyleProps } from './Greeting';
 
 export function GameEnding({
@@ -24,7 +25,7 @@ export function GameEnding({
   return (
     <>
       <div
-        className={className + ' tapOrClickBefore'}
+        className={className}
         style={{
           ...sharedStyleProps,
           animationDuration: '0.25s',
@@ -33,8 +34,7 @@ export function GameEnding({
           bottom: '4rem',
         }}
       >
-        {' '}
-        to restart
+        {tapOrClickBefore} to restart
       </div>
       {isHighScoreNew || highScore ? (
         <div

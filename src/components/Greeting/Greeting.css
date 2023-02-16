@@ -33,15 +33,6 @@
   }
 }
 
-.tapOrClickBefore::before {
-  content: 'tap';
-}
-@media screen and (hover: hover) {
-  .tapOrClickBefore::before {
-    content: 'click';
-  }
-}
-
 .links {
   max-width: fit-content;
   padding: 0.1em 0.5em 0.3em;

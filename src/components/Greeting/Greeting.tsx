@@ -3,6 +3,7 @@ import './Greeting.css';
 import { useMemo, useState } from 'react';
 
 import packageJson from '../../../package.json';
+import { tapOrClickBefore } from '../../shared/texts';
 import { HowToPlay } from '../HowToPlay';
 
 export const sharedStyleProps: React.CSSProperties = {
@@ -53,7 +54,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
         stack
       </div>
       <div
-        className={className + ' tapOrClickBefore'}
+        className={className}
         style={{
           ...sharedStyleProps,
           animationDelay: '0.2s',
@@ -62,8 +63,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
           top: `${headingTop + headingSize + 2}rem`,
         }}
       >
-        {' '}
-        to start
+        {tapOrClickBefore} to start
       </div>
       <HowToPlay className={className} />
       <GreetingLinks className={className} />
