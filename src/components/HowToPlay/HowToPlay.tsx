@@ -2,6 +2,7 @@ import './HowToPlay.css';
 
 import { useState } from 'react';
 
+import { useTheme } from '../../contexts/ThemeContext';
 import { ReactComponent as IllustrationGameOver } from '../../images/illustration_game-over.svg';
 import { ReactComponent as IllustrationTapToStack } from '../../images/illustration_tap-to-stack.svg';
 import { resetButtonStyles } from '../../tools/stylesToolkit';
@@ -162,6 +163,8 @@ function HowToPlayOpenButton({
   className: string;
   onClick: React.DOMAttributes<HTMLButtonElement>['onClick'];
 }) {
+  const { theme } = useTheme();
+
   const buttonSize = 0.5;
 
   return (
@@ -180,13 +183,13 @@ function HowToPlayOpenButton({
         left: 41 * buttonSize,
 
         borderRadius: '100%',
-        border: `white ${4 * buttonSize}px solid`,
+        border: `${theme.lightElements} ${4 * buttonSize}px solid`,
         height: 58 * buttonSize,
         width: 58 * buttonSize,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        color: 'white',
+        color: theme.lightElements,
         fontSize: 50 * buttonSize,
         fontFamily: `'Lucida Sans', Arial, sans-serif`, // The dot in the bottom of the question mark should be square. Fonts were chosen by that matter.
 

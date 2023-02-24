@@ -1,10 +1,12 @@
 import { Triplet, useBox } from '@react-three/cannon';
 import { Mesh } from 'three';
 
-import { getBaseTileColor } from '../shared/colors';
+import { useTheme } from '../contexts/ThemeContext';
 import { config } from '../shared/constants';
 
 export function BaseTile() {
+  const { theme } = useTheme();
+
   const boxArgs: Triplet = [
     100,
     530 - config.tileHeight, // 500
@@ -24,7 +26,7 @@ export function BaseTile() {
   return (
     <mesh ref={ref} receiveShadow>
       <boxGeometry args={boxArgs} />
-      <meshPhongMaterial color={getBaseTileColor(0)} />
+      <meshPhongMaterial color={theme.tile(-1)} />
     </mesh>
   );
 }

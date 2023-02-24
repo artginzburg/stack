@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Fragment } from 'react';
 import { BackSide, Vector2, Vector3 } from 'three';
 
+import { useTheme } from '../contexts/ThemeContext';
 import { ComboConfig } from '../features/combos';
 import { config } from '../shared/constants';
 import { easeInOutSineEaseOutCirc } from '../tools/easing';
@@ -58,6 +59,8 @@ export interface PerfectEffectProps {
   currentCombo: number;
 }
 function PerfectEffect({ position, size, materialOpacity }: PerfectEffectProps) {
+  const { theme } = useTheme();
+
   if (materialOpacity <= 0) {
     return null;
   }
@@ -70,13 +73,20 @@ function PerfectEffect({ position, size, materialOpacity }: PerfectEffectProps) 
       position={[position.x, position.y - config.tileHeight / 2, position.z]}
       rotation-x={Math.PI / 2}
     >
-      <meshBasicMaterial color="#fff" side={BackSide} transparent opacity={materialOpacity} />
+      <meshBasicMaterial
+        color={theme.lightElements}
+        side={BackSide}
+        transparent
+        opacity={materialOpacity}
+      />
     </Plane>
   );
 }
 
 /** @todo exclude into a separate file. */
 function ComboEffect({ position, size, materialOpacity, currentCombo }: PerfectEffectProps) {
+  const { theme } = useTheme();
+
   if (materialOpacity <= 0) {
     return null;
   }
@@ -129,7 +139,12 @@ function ComboEffect({ position, size, materialOpacity, currentCombo }: PerfectE
             borderWidth={comboEffectWidth}
             key={stage}
           >
-            <meshBasicMaterial color="#fff" side={BackSide} transparent opacity={materialOpacity} />
+            <meshBasicMaterial
+              color={theme.lightElements}
+              side={BackSide}
+              transparent
+              opacity={materialOpacity}
+            />
           </PlaneBorder>
         );
       })}

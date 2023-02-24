@@ -4,13 +4,14 @@ import { useMemo, useState } from 'react';
 
 import packageJson from '../../../package.json';
 import { tapOrClickBefore } from '../../shared/texts';
+import { useTheme } from '../../contexts/ThemeContext';
 import { HowToPlay } from '../HowToPlay';
 
+/** @todo rename to sharedTextProps */
 export const sharedStyleProps: React.CSSProperties = {
   textAlign: 'center',
   width: '100%',
 
-  color: 'white',
   fontWeight: 100,
   letterSpacing: 1,
   fontStretch: '120%',
@@ -20,6 +21,8 @@ export const sharedStyleProps: React.CSSProperties = {
 };
 
 export function Greeting({ index, isStarted }: { index: number; isStarted: boolean }) {
+  const { theme } = useTheme();
+
   const [shouldDisplay, setShouldDisplay] = useState(true);
 
   if (!isStarted && !shouldDisplay) {
@@ -47,6 +50,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
         className={className}
         style={{
           ...sharedStyleProps,
+          color: theme.lightElements,
           fontSize: `${headingSize}rem`,
           top: `${headingTop}rem`,
         }}
@@ -57,6 +61,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
         className={className}
         style={{
           ...sharedStyleProps,
+          color: theme.lightElements,
           animationDelay: '0.2s',
           animationDuration: '0.25s',
           fontSize: '1rem',
@@ -72,6 +77,8 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
 }
 
 function GreetingLinks({ className }: { className: string }) {
+  const { theme } = useTheme();
+
   const repoUrl = useMemo(() => new URL(`https://github.com/${packageJson.repository}`), []);
   const authorUrl = useMemo(() => new URL(new URL(packageJson.homepage).origin), []);
 
@@ -82,6 +89,7 @@ function GreetingLinks({ className }: { className: string }) {
       className={className + ' links'}
       style={{
         ...sharedStyleProps,
+        color: theme.lightElements,
         fontWeight: 300,
         fontStretch: '100%',
         letterSpacing: 0.5,

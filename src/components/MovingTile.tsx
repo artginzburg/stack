@@ -3,7 +3,7 @@ import { useControls } from 'leva';
 import { useEffect, useState } from 'react';
 import { Mesh, Vector3 } from 'three';
 
-import { getTileColor } from '../shared/colors';
+import { useTheme } from '../contexts/ThemeContext';
 import { config } from '../shared/constants';
 
 import type { TileProps } from './Tile';
@@ -24,6 +24,8 @@ export function MovingTile({
   lastCube: TileProps | undefined;
   speedOfMovingTile: number;
 }) {
+  const { theme } = useTheme();
+
   const { autoplayError } = useControls({
     /**
      * 0 — no error, will score more points than a human can wait to count.
@@ -97,7 +99,7 @@ export function MovingTile({
   return (
     <mesh ref={movingTileMeshRef} castShadow>
       <boxGeometry args={[previousTile.size.x, config.tileHeight, previousTile.size.y]} />
-      <meshPhongMaterial color={getTileColor(index)} />
+      <meshPhongMaterial color={theme.tile(index)} />
     </mesh>
   );
 }

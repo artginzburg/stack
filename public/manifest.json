@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "short_name": "Stack",
   "name": "Stack · The best block-stacking game",
   "icons": [
