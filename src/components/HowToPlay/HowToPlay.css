@@ -19,4 +19,12 @@
 
 .howToPlayCloseButton {
   background-image: url('../../images/icon_cross.svg');
+  background-color: #bd2719;
+
+  transition-property: background-color;
+  transition-duration: 0.2s;
+}
+
+.howToPlayCloseButton:active {
+  background-color: #c8c8c8;
 }

@@ -74,7 +74,6 @@ function HowToPlayModal({
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: '40%',
-            backgroundColor: '#bd2719',
 
             borderRadius: '100%',
             width: 'min(6.6vmin, 50px)',
