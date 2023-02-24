@@ -10,8 +10,7 @@ export function Score({ index, isEnded }: { index: number; isEnded: boolean }) {
         ...sharedStyleProps,
         color: theme.lightElements,
         fontWeight: 200,
-        letterSpacing: 0,
-        fontStretch: '100%',
+        letterSpacing: -2,
 
         fontSize: '5rem',
         top: '2rem',

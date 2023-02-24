@@ -13,8 +13,7 @@ export const sharedStyleProps: React.CSSProperties = {
   width: '100%',
 
   fontWeight: 100,
-  letterSpacing: 1,
-  fontStretch: '120%',
+  letterSpacing: 2.5,
   textTransform: 'uppercase',
 
   position: 'fixed',
@@ -66,6 +65,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
           animationDuration: '0.25s',
           fontSize: '1rem',
           top: `${headingTop + headingSize + 2}rem`,
+          letterSpacing: 1,
         }}
       >
         {tapOrClickBefore} to start
@@ -91,11 +91,10 @@ function GreetingLinks({ className }: { className: string }) {
         ...sharedStyleProps,
         color: theme.lightElements,
         fontWeight: 300,
-        fontStretch: '100%',
         letterSpacing: 0.5,
         textTransform: 'none',
 
-        fontSize: '0.7rem',
+        fontSize: '0.8rem',
         right: '1rem',
         bottom: '1rem',
         textAlign: 'right',

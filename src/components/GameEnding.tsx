@@ -34,6 +34,7 @@ export function GameEnding({
           color: theme.lightElements,
           animationDuration: '0.25s',
           fontSize: '1rem',
+          letterSpacing: 1,
 
           bottom: '4rem',
         }}
@@ -47,7 +48,6 @@ export function GameEnding({
             ...sharedStyleProps,
             color: theme.lightElements,
             letterSpacing: 0,
-            fontStretch: '100%',
 
             fontSize: '2rem',
             top: `${5 + 2 + 1}rem`, // `5 + 2` is `size + top` of Score.

@@ -32,10 +32,7 @@ function HowToPlayModal({
 }: {
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const sharedFontStyle: React.CSSProperties = {
-    /** @todo decide on the fontStretch to use everywhere, like 110 or 120. Also decide whether to use letterSpacing */
-    fontStretch: '110%',
-  };
+  const sharedFontStyle: React.CSSProperties = {};
 
   return (
     <div
