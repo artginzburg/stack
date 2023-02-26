@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { ReactComponent as IllustrationGameOver } from '../../images/illustration_game-over.svg';
 import { ReactComponent as IllustrationTapToStack } from '../../images/illustration_tap-to-stack.svg';
+import { tapOrClickBefore } from '../../shared/texts';
 import { resetButtonStyles } from '../../tools/stylesToolkit';
 
 export function HowToPlay({ className }: { className: string }) {
@@ -100,7 +101,7 @@ function HowToPlayModal({
         </h2>
         <HowToPlayFigure
           Illustration={IllustrationTapToStack}
-          text={'tap to stack'}
+          text={`${tapOrClickBefore} to stack`}
           sharedFontStyle={sharedFontStyle}
           figureStyle={{
             marginTop: '4%',
