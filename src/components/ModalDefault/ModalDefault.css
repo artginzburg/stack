@@ -1,4 +1,4 @@
-.howToPlayContainer {
+.modalDefaultContainer {
   position: fixed;
   top: 0;
   left: 0;
@@ -17,7 +17,7 @@
   align-items: center;
 }
 
-.howToPlayCloseButton {
+.modalDefaultCloseButton {
   background-image: url('../../images/icon_cross.svg');
   background-color: #bd2719;
 
@@ -25,6 +25,6 @@
   transition-duration: 0.2s;
 }
 
-.howToPlayCloseButton:active {
+.modalDefaultCloseButton:active {
   background-color: #c8c8c8;
 }

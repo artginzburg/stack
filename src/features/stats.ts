@@ -16,13 +16,15 @@ const defaultStats = {
   /** Times the player has beaten his own best score. */
   beatenHighScore: 0,
 };
-// export type Statistic = typeof defaultStats;
+export type Statistic = typeof defaultStats;
 
 export const statisticMethods = {
-  getUnfinishedGames(stats: typeof defaultStats) {
+  getUnfinishedGames(stats: Statistic) {
     return stats.gamesStarted - stats.gamesEnded;
   },
-  getPerfectPercentage(stats: typeof defaultStats) {
+  getPerfectPercentage(stats: Statistic) {
+    if (stats.totalScore === 0) return 0;
+
     return stats.perfects / stats.totalScore;
   },
 };
@@ -31,9 +33,7 @@ export function useStatistics() {
   const [thisGameStats, setThisGameStats] = useState(defaultStats);
   const [globalStats, setGlobalStats] = useLocalStorage(LocalStorageKeys.Stats, defaultStats);
 
-  const setAllStats: React.Dispatch<React.SetStateAction<typeof defaultStats>> = (
-    setStateAction,
-  ) => {
+  const setAllStats: React.Dispatch<React.SetStateAction<Statistic>> = (setStateAction) => {
     setThisGameStats(setStateAction);
     setGlobalStats(setStateAction);
   };
@@ -65,6 +65,9 @@ export function useStatistics() {
     }));
   }
   function updateAllStatsOnLose() {
+    console.log('current', thisGameStats);
+    console.log('global', globalStats);
+
     setAllStats((prev) => ({
       ...prev,
       currentCombo: defaultStats.currentCombo,

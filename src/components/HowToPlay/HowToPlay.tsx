@@ -1,5 +1,3 @@
-import './HowToPlay.css';
-
 import { useState } from 'react';
 
 import { useTheme } from '../../contexts/ThemeContext';
@@ -7,6 +5,7 @@ import { ReactComponent as IllustrationGameOver } from '../../images/illustratio
 import { ReactComponent as IllustrationTapToStack } from '../../images/illustration_tap-to-stack.svg';
 import { tapOrClickBefore } from '../../shared/texts';
 import { resetButtonStyles } from '../../tools/stylesToolkit';
+import { ModalDefault } from '../ModalDefault';
 
 export function HowToPlay({ className }: { className: string }) {
   const [isOpened, setIsOpened] = useState(false);
@@ -36,92 +35,40 @@ function HowToPlayModal({
   const sharedFontStyle: React.CSSProperties = {};
 
   return (
-    <div
-      className="howToPlayContainer"
-      onClick={(event) => {
-        const isDirectClickOnBackground = event.currentTarget === event.target;
-        if (isDirectClickOnBackground) {
-          setIsOpened(false);
-        }
-      }}
-    >
-      <section
+    <ModalDefault setIsOpened={setIsOpened}>
+      <h2
         style={{
-          background: 'black',
-          color: 'white',
-          paddingTop: '5vmin',
-          paddingLeft: '4vmin',
-          paddingRight: '4vmin',
-          paddingBottom: '7vmin',
-          borderRadius: '1.7vmin',
-
-          textTransform: 'uppercase',
-          textAlign: 'center',
+          margin: 0,
+          padding: 0,
           fontWeight: 200,
-
-          width: '63%',
-          maxWidth: 300,
-
-          position: 'relative',
+          fontSize: 'min(7.5vmin, 35px)',
+          ...sharedFontStyle,
         }}
       >
-        <button
-          className="howToPlayCloseButton"
-          style={{
-            ...resetButtonStyles,
-            cursor: 'pointer',
-            background: undefined,
-
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundSize: '40%',
-
-            borderRadius: '100%',
-            width: 'min(6.6vmin, 50px)',
-            height: 'min(6.6vmin, 50px)',
-
-            position: 'absolute',
-            top: '-3.3vmin',
-            right: '-3vmin',
-          }}
-          onClick={() => {
-            setIsOpened(false);
-          }}
-        ></button>
-        <h2
-          style={{
-            margin: 0,
-            padding: 0,
-            fontWeight: 200,
-            fontSize: 'min(7.5vmin, 35px)',
-            ...sharedFontStyle,
-          }}
-        >
-          how to play
-        </h2>
-        <HowToPlayFigure
-          Illustration={IllustrationTapToStack}
-          text={`${tapOrClickBefore} to stack`}
-          sharedFontStyle={sharedFontStyle}
-          figureStyle={{
-            marginTop: '4%',
-          }}
-        />
-        <HowToPlayFigure
-          Illustration={IllustrationGameOver}
-          text={
-            <>
-              too early / too late
-              <br /> = game over
-            </>
-          }
-          sharedFontStyle={sharedFontStyle}
-          figureStyle={{
-            marginTop: '8%',
-          }}
-        />
-      </section>
-    </div>
+        how to play
+      </h2>
+      <HowToPlayFigure
+        Illustration={IllustrationTapToStack}
+        text={`${tapOrClickBefore} to stack`}
+        sharedFontStyle={sharedFontStyle}
+        figureStyle={{
+          marginTop: '4%',
+        }}
+      />
+      <HowToPlayFigure
+        Illustration={IllustrationGameOver}
+        text={
+          <>
+            too early / too late
+            <br /> = game over
+          </>
+        }
+        sharedFontStyle={sharedFontStyle}
+        figureStyle={{
+          marginTop: '8%',
+        }}
+      />
+    </ModalDefault>
   );
 }
 

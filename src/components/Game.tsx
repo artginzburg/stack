@@ -2,7 +2,7 @@ import { Debug, Physics } from '@react-three/cannon';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useControls } from 'leva';
-import { useMemo, useRef, useState } from 'react';
+import { memo, useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useEventListener, useLocalStorage } from 'usehooks-ts';
 
@@ -60,6 +60,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
   const {
     thisGameStats,
+    globalStats,
 
     updateAllStatsOnCutBox,
     updateAllStatsOnGameStart,
@@ -339,7 +340,15 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         <PerfectEffects effects={effectsPossiblySliced} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
       </Canvas>
-      <GameEnding isStarted={isStarted} isEnded={isEnded} isHighScoreNew={isHighScoreNew} />
+      <GameEndingMemoized
+        isStarted={isStarted}
+        isEnded={isEnded}
+        isHighScoreNew={isHighScoreNew}
+        thisGameStats={thisGameStats}
+        globalStats={globalStats}
+      />
     </div>
   );
 }
+
+const GameEndingMemoized = memo(GameEnding);

@@ -1,0 +1,7 @@
+.viewStatsButton {
+  cursor: pointer;
+}
+
+.viewStatsButton:hover {
+  color: rgb(255, 0, 98) !important;
+}

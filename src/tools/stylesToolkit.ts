@@ -7,3 +7,8 @@ export const resetButtonStyles: React.CSSProperties = {
   padding: 0,
   fontFamily: 'inherit',
 };
+
+export const resetListStyles: React.CSSProperties = {
+  padding: 0,
+  margin: 0,
+};
