@@ -93,7 +93,6 @@ function useCameraPositionController({
   const skipFirst = 2;
   const skipFirstOffset = skipFirst * config.tileHeight;
 
-  // const [point, setPoint] = useState(new Vector3());
   const [start, setStart] = useState(new Vector3());
 
   const magicTileHeightMultiplierForDefaultOffset = 2.5;
@@ -119,7 +118,6 @@ function useCameraPositionController({
     // Fires off on load, then with each cut tile, then on restart.
 
     const newPoint = new Vector3(0, previousTile.position.y, 0);
-    // setPoint(newPoint);
     setTimer(0);
     setStart(camera.position.clone());
     setDestination(newPoint.clone().add(offset));
