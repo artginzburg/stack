@@ -90,6 +90,8 @@ export function CameraController({
   });
 
   useEffect(() => {
+    // Fires off on load, then with each cut tile, then on restart.
+
     const newPoint = new Vector3(0, previousTile.position.y, 0);
     // setPoint(newPoint);
     setTimer(0);
