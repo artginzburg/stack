@@ -8,11 +8,13 @@ export function useInitVisitInSession() {
 
   useEffect(() => {
     setVisited(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
 
 export function useIsFirstVisitInSession() {
   const [visited] = useSessionStorage(SessionStorageKeys.Visited, false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const isFirstVisitInSession = useMemo(() => visited === false, []);
 
   return { isFirstVisitInSession };
