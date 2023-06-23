@@ -29,32 +29,23 @@ export function CameraController({
   previousTile: PreviousTile;
   isEnded: boolean;
 }) {
-  const skipFirst = 2;
-  const skipFirstOffset = skipFirst * config.tileHeight;
-
-  // const [point, setPoint] = useState(new Vector3());
-  const [start, setStart] = useState(new Vector3());
   const [destination, setDestination] = useState(new Vector3());
-  const magicTileHeightMultiplierForDefaultOffset = 2.5;
-  const defaultOffset = useMemo(
-    () =>
-      new Vector3(
-        -250,
-        250 +
-          magicValues.pointOfViewFix -
-          config.tileHeight * magicTileHeightMultiplierForDefaultOffset +
-          25,
-        -250,
-      ),
-    [],
-  );
-  const [offset] = useState(defaultOffset);
-  const [timer, setTimer] = useState<number>(0);
-  const [animationTime] = useState(cameraConfig.animationTime);
 
+  useCameraZoomController({ isEnded, destination });
+
+  useCameraPositionController({ previousTile, destination, setDestination });
+
+  return null;
+}
+
+function useCameraZoomController({
+  isEnded,
+  destination,
+}: {
+  isEnded: boolean;
+  destination: Vector3;
+}) {
   const [initialViewportDistance, setInitialViewportDistance] = useState(0);
-
-  const camera = useThree((state) => state.camera);
 
   useThree(({ camera, viewport, size }) => {
     if (initialViewportDistance === 0) {
@@ -88,6 +79,41 @@ export function CameraController({
     camera.zoom = limitedZoom;
     camera.updateProjectionMatrix();
   });
+}
+
+function useCameraPositionController({
+  previousTile,
+  destination,
+  setDestination,
+}: {
+  previousTile: PreviousTile;
+  destination: Vector3;
+  setDestination: React.Dispatch<React.SetStateAction<Vector3>>;
+}) {
+  const skipFirst = 2;
+  const skipFirstOffset = skipFirst * config.tileHeight;
+
+  // const [point, setPoint] = useState(new Vector3());
+  const [start, setStart] = useState(new Vector3());
+
+  const magicTileHeightMultiplierForDefaultOffset = 2.5;
+  const defaultOffset = useMemo(
+    () =>
+      new Vector3(
+        -250,
+        250 +
+          magicValues.pointOfViewFix -
+          config.tileHeight * magicTileHeightMultiplierForDefaultOffset +
+          25,
+        -250,
+      ),
+    [],
+  );
+  const [offset] = useState(defaultOffset);
+  const [timer, setTimer] = useState<number>(0);
+  const [animationTime] = useState(cameraConfig.animationTime);
+
+  const camera = useThree((state) => state.camera);
 
   useEffect(() => {
     // Fires off on load, then with each cut tile, then on restart.
@@ -97,7 +123,7 @@ export function CameraController({
     setTimer(0);
     setStart(camera.position.clone());
     setDestination(newPoint.clone().add(offset));
-  }, [camera, offset, previousTile.position.y]);
+  }, [camera, offset, previousTile.position.y, setDestination]);
 
   useFrame((state, delta) => {
     if (previousTile.position.y < skipFirstOffset) {
@@ -111,6 +137,4 @@ export function CameraController({
       setTimer((prev) => prev + delta);
     }
   });
-
-  return null;
 }
