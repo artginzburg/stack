@@ -31,14 +31,16 @@ export function CameraController({
   previousTile,
   isStarted,
   isEnded,
+  index,
 }: {
   previousTile: PreviousTile;
   isStarted: boolean;
   isEnded: boolean;
+  index: number;
 }) {
   const [destination, setDestination] = useState(new Vector3());
 
-  useCameraZoomController({ isEnded, destination });
+  useCameraZoomController({ isEnded, destination, index });
 
   useCameraPositionController({ previousTile, destination, setDestination, isStarted, isEnded });
 
@@ -48,15 +50,17 @@ export function CameraController({
 function useCameraZoomController({
   isEnded,
   destination,
+  index,
 }: {
   isEnded: boolean;
   destination: Vector3;
+  index: number;
 }) {
   const [initialViewportDistance, setInitialViewportDistance] = useState(0);
 
   const zoomOutTiming = 0.03;
-  // /** The minimum score to trigger a zoom out on game end (inclusive). `15` matches the original game. */
-  // const zoomOutMinimumScore = 15;
+  /** The minimum score to trigger a zoom out on game end (inclusive). `15` matches the original game. */
+  const zoomOutMinimumScore = 15;
 
   useThree(({ camera, viewport, size }) => {
     if (initialViewportDistance === 0) {
@@ -64,6 +68,7 @@ function useCameraZoomController({
     }
 
     if (isEnded) {
+      if (index < zoomOutMinimumScore) return;
       // Zooming out
 
       const newZoom = initialViewportDistance / viewport.distance;

@@ -304,7 +304,12 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
             })}
         shadows="basic"
       >
-        <CameraController previousTile={previousTile} isStarted={isStarted} isEnded={isEnded} />
+        <CameraController
+          previousTile={previousTile}
+          isStarted={isStarted}
+          isEnded={isEnded}
+          index={index}
+        />
         <ambientLight color="#ccc" intensity={0.9} />
         <DirLight previousTile={previousTile} />
         {isStarted && !isEnded && (
