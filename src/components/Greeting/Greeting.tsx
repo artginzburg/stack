@@ -41,21 +41,16 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
   const headingTop = 5;
   const headingSize = 4;
 
-  const className = ['greeting', isStarted || index ? 'fadeOut' : null].filter(Boolean).join(' ');
+  const fadeOutClassName = isStarted || index ? 'fadeOut' : null;
+  const className = ['greeting', fadeOutClassName].filter(Boolean).join(' ');
 
   return (
     <>
-      <div
-        className={className}
-        style={{
-          ...sharedStyleProps,
-          color: theme.lightElements,
-          fontSize: `${headingSize}rem`,
-          top: `${headingTop}rem`,
-        }}
-      >
-        stack
-      </div>
+      <GreetingTitle
+        fadeOutClassName={fadeOutClassName}
+        headingSize={headingSize}
+        headingTop={headingTop}
+      />
       <div
         className={className}
         style={{
@@ -73,6 +68,45 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
       <HowToPlay className={className} />
       <GreetingLinks className={className} />
     </>
+  );
+}
+
+function GreetingTitle({
+  fadeOutClassName,
+  headingSize,
+  headingTop,
+}: {
+  fadeOutClassName: string | null;
+  headingSize: number;
+  headingTop: number;
+}) {
+  const { theme } = useTheme();
+
+  const title = 'stack';
+  const slowDown = false;
+
+  return (
+    <div
+      className={['greetingTitleContainer', fadeOutClassName].filter(Boolean).join(' ')}
+      style={{
+        ...sharedStyleProps,
+        width: undefined,
+        // position: undefined,
+        left: '50%', // to center even with position: fixed;
+        transform: 'translateX(-50%)', // to center even with position: fixed;
+
+        color: theme.lightElements,
+        fontSize: `${headingSize}rem`,
+        top: `${headingTop}rem`,
+
+        // @ts-expect-error valid custom CSS property
+        '--animationDuration': slowDown ? '5s' : undefined,
+      }}
+    >
+      <p>{title}</p>
+      <span data-text={title}></span>
+      <span data-text={title}></span>
+    </div>
   );
 }
 
