@@ -1,4 +1,4 @@
-import { useFrame, useThree } from '@react-three/fiber';
+import { type RootState, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useState } from 'react';
 import { Vector3 } from 'three';
 import { lerp } from 'three/src/math/MathUtils';
@@ -17,25 +17,30 @@ const cameraConfig: {
   easing: (x: number) => number;
   /** The animation duration */
   animationTime: number;
+  /** Can't be changed at runtime. Intentionally: to not do almost any work if disabled. */
+  startAppear: boolean;
 } = {
   /** was just `ease = (t: number) => t * t * (3.0 - 2.0 * t)` in the first version of the remake */
   easing: easeInOutSineEaseOutCirc,
   /** was `0.5` in the first version of the remake */
   animationTime: 1.3,
+  startAppear: true,
 } as const;
 
 export function CameraController({
   previousTile,
+  isStarted,
   isEnded,
 }: {
   previousTile: PreviousTile;
+  isStarted: boolean;
   isEnded: boolean;
 }) {
   const [destination, setDestination] = useState(new Vector3());
 
   useCameraZoomController({ isEnded, destination });
 
-  useCameraPositionController({ previousTile, destination, setDestination, isEnded });
+  useCameraPositionController({ previousTile, destination, setDestination, isStarted, isEnded });
 
   return null;
 }
@@ -50,6 +55,8 @@ function useCameraZoomController({
   const [initialViewportDistance, setInitialViewportDistance] = useState(0);
 
   const zoomOutTiming = 0.03;
+  // /** The minimum score to trigger a zoom out on game end (inclusive). `15` matches the original game. */
+  // const zoomOutMinimumScore = 15;
 
   useThree(({ camera, viewport, size }) => {
     if (initialViewportDistance === 0) {
@@ -94,11 +101,13 @@ function useCameraPositionController({
   previousTile,
   destination,
   setDestination,
+  isStarted,
   isEnded,
 }: {
   previousTile: PreviousTile;
   destination: Vector3;
   setDestination: React.Dispatch<React.SetStateAction<Vector3>>;
+  isStarted: boolean;
   isEnded: boolean;
 }) {
   const skipFirst = 2;
@@ -125,16 +134,28 @@ function useCameraPositionController({
 
   const camera = useThree((state) => state.camera);
 
+  const { shouldStartAppear, onFrame: onFrameStartAppear } = useAppearAnimation({
+    defaultOffset,
+    skipFirstOffset,
+    isStarted,
+    timer,
+    setTimer,
+    camera,
+  });
+
   useEffect(() => {
+    if (shouldStartAppear) return;
     // Fires off on load, then with each cut tile, then on restart.
 
     const newPoint = new Vector3(0, previousTile.position.y, 0);
     setTimer(0);
     setStart(camera.position.clone());
     setDestination(newPoint.clone().add(offset));
-  }, [camera, offset, previousTile.position.y, setDestination]);
+  }, [camera, offset, previousTile.position.y, setDestination, shouldStartAppear]);
 
   useFrame((state, delta) => {
+    if (onFrameStartAppear?.(delta)) return;
+
     if (isEnded) return; // When the game is ended, the zoom controller should take precedence over both the camera position and the zoom. Without this line, the zoom controller would not be able to update the camera position until `timer` reaches `animationTime`.
 
     if (previousTile.position.y < skipFirstOffset) {
@@ -148,4 +169,72 @@ function useCameraPositionController({
       setTimer((prev) => prev + delta);
     }
   });
+}
+
+function useAppearAnimation({
+  defaultOffset,
+  skipFirstOffset,
+  isStarted,
+  timer,
+  setTimer,
+  camera,
+}: {
+  defaultOffset: Vector3;
+  skipFirstOffset: number;
+  isStarted: boolean;
+  timer: number;
+  setTimer: React.Dispatch<React.SetStateAction<number>>;
+  camera: RootState['camera'];
+}) {
+  if (!cameraConfig.startAppear) {
+    return {
+      shouldStartAppear: undefined,
+      onFrame: undefined,
+    };
+  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [shouldStartAppear, setShouldStartAppear] = useState(true);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const startAppearStartingPoint = useMemo(
+    () => new Vector3(defaultOffset.x, 1000, defaultOffset.z),
+    [defaultOffset.x, defaultOffset.z],
+  );
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const startAppearDestination = useMemo(
+    () => defaultOffset.clone().add(new Vector3(0, skipFirstOffset, 0)),
+    [defaultOffset, skipFirstOffset],
+  );
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (!isStarted) {
+      setShouldStartAppear(true);
+    }
+  }, [isStarted]);
+
+  const onFrame = (delta: number): boolean => {
+    if (!shouldStartAppear) return false;
+    // Do appear.
+
+    const startAppearDuration = 1;
+
+    if (timer < startAppearDuration) {
+      // Animate appear.
+      const change = cameraConfig.easing(timer / startAppearDuration);
+      camera.position.lerpVectors(startAppearStartingPoint, startAppearDestination, change);
+      setTimer((prev) => prev + delta);
+    } else {
+      // Finish appear.
+      setShouldStartAppear(false);
+    }
+
+    return true;
+  };
+
+  return {
+    shouldStartAppear,
+    onFrame,
+  };
 }
