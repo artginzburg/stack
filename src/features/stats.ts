@@ -65,9 +65,6 @@ export function useStatistics() {
     }));
   }
   function updateAllStatsOnLose() {
-    console.log('current', thisGameStats);
-    console.log('global', globalStats);
-
     setAllStats((prev) => ({
       ...prev,
       currentCombo: defaultStats.currentCombo,

@@ -25,6 +25,7 @@ import { PerfectEffectProps, PerfectEffects } from './PerfectEffect';
 import { Score } from './Score';
 import { ReactTile, TileProps } from './Tile';
 import { PreviousTile } from './types';
+import { useInitVisitInSession } from '../features/firstVisitInSession';
 
 const gameConfig = {
   physics: {
@@ -69,6 +70,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
 
     resetThisGameStats,
   } = useStatistics();
+  useInitVisitInSession();
 
   const debug = window.location.search.includes('debug');
 

@@ -6,6 +6,7 @@ import packageJson from '../../../package.json';
 import { tapOrClickBefore } from '../../shared/texts';
 import { useTheme } from '../../contexts/ThemeContext';
 import { HowToPlay } from '../HowToPlay';
+import { useIsFirstVisitInSession } from '../../features/firstVisitInSession';
 
 /** @todo rename to sharedTextProps */
 export const sharedStyleProps: React.CSSProperties = {
@@ -82,8 +83,10 @@ function GreetingTitle({
 }) {
   const { theme } = useTheme();
 
+  const { isFirstVisitInSession } = useIsFirstVisitInSession();
+
   const title = 'stack';
-  const slowDown = false;
+  const slowDown = isFirstVisitInSession;
 
   return (
     <div
@@ -100,7 +103,7 @@ function GreetingTitle({
         top: `${headingTop}rem`,
 
         // @ts-expect-error valid custom CSS property
-        '--animationDuration': slowDown ? '5s' : undefined,
+        '--animationDuration': slowDown ? '4s' : undefined,
       }}
     >
       <p>{title}</p>
