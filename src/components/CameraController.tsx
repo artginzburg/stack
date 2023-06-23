@@ -14,6 +14,7 @@ const cameraConfig: {
    * I think `easeOutCirc` looks the most like the original game — quick and exponential at the start, but very "prolonged" and linear at the end. Though in the original, the start of the animation seems a little less sharp than in `easeOutCirc`. That's why I mixed with `easeInOutSine`. Looks a lot more like the original now.
    */
   easing: (x: number) => number;
+  /** The animation duration */
   animationTime: number;
 } = {
   /** was just `ease = (t: number) => t * t * (3.0 - 2.0 * t)` in the first version of the remake */
