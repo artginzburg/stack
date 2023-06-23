@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/stack/static/css/main.e756d6df.css",
-    "main.js": "/stack/static/js/main.63b8ea56.js",
+    "main.css": "/stack/static/css/main.36aa42ab.css",
+    "main.js": "/stack/static/js/main.cf293266.js",
     "static/js/27.08a32db8.chunk.js": "/stack/static/js/27.08a32db8.chunk.js",
     "service-worker.js": "/stack/service-worker.js",
     "static/media/illustration_game-over.svg": "/stack/static/media/illustration_game-over.daebaf4dea6dfafda64e0ab146ec3f29.svg",
@@ -10,7 +10,7 @@
     "static/media/icon_cross.svg": "/stack/static/media/icon_cross.ceed700baf1c62099346.svg"
   },
   "entrypoints": [
-    "static/css/main.e756d6df.css",
-    "static/js/main.63b8ea56.js"
+    "static/css/main.36aa42ab.css",
+    "static/js/main.cf293266.js"
   ]
 }
