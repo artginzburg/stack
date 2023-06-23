@@ -1,6 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useState } from 'react';
 import { Vector3 } from 'three';
+import { lerp } from 'three/src/math/MathUtils';
 
 import { config, magicValues } from '../shared/constants';
 import { easeInOutSineEaseOutCirc } from '../tools/easing';
@@ -34,7 +35,7 @@ export function CameraController({
 
   useCameraZoomController({ isEnded, destination });
 
-  useCameraPositionController({ previousTile, destination, setDestination });
+  useCameraPositionController({ previousTile, destination, setDestination, isEnded });
 
   return null;
 }
@@ -48,16 +49,23 @@ function useCameraZoomController({
 }) {
   const [initialViewportDistance, setInitialViewportDistance] = useState(0);
 
+  const zoomOutTiming = 0.03;
+
   useThree(({ camera, viewport, size }) => {
     if (initialViewportDistance === 0) {
       setInitialViewportDistance(viewport.distance);
     }
 
     if (isEnded) {
+      // Zooming out
+
       const newZoom = initialViewportDistance / viewport.distance;
-      camera.position.set(-250, destination.y - 150 / newZoom, -250);
-      camera.zoom = newZoom;
-      camera.updateProjectionMatrix();
+      camera.zoom = lerp(camera.zoom, newZoom, zoomOutTiming);
+
+      const newCameraPosition = new Vector3(-250, destination.y - 150 / newZoom, -250);
+      camera.position.lerp(newCameraPosition, zoomOutTiming / 2);
+
+      camera.updateProjectionMatrix(); // is this line necessary? Seems like nothing changes without it.
       return;
     }
 
@@ -86,10 +94,12 @@ function useCameraPositionController({
   previousTile,
   destination,
   setDestination,
+  isEnded,
 }: {
   previousTile: PreviousTile;
   destination: Vector3;
   setDestination: React.Dispatch<React.SetStateAction<Vector3>>;
+  isEnded: boolean;
 }) {
   const skipFirst = 2;
   const skipFirstOffset = skipFirst * config.tileHeight;
@@ -125,6 +135,8 @@ function useCameraPositionController({
   }, [camera, offset, previousTile.position.y, setDestination]);
 
   useFrame((state, delta) => {
+    if (isEnded) return; // When the game is ended, the zoom controller should take precedence over both the camera position and the zoom. Without this line, the zoom controller would not be able to update the camera position until `timer` reaches `animationTime`.
+
     if (previousTile.position.y < skipFirstOffset) {
       camera.position.y = defaultOffset.y + skipFirstOffset;
       return;
