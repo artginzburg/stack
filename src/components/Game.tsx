@@ -285,10 +285,9 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   });
 
   return (
-    <div style={{ height: '100vh', background: autoplay ? '#1f0014' : theme.background(index) }}>
-      <Greeting index={index} isStarted={isStarted} />
-      <Score index={index} isEnded={isEnded} />
+    <div style={{ height: '100vh' }}>
       <Canvas
+        gl={{ antialias: false, alpha: false }} //* Disabling antialias is visible if you look closely. Think about returning it. Or making it configurable? But it seems that in the original game, antialias is disabled, and I want to match it as much as possible, so it's probably fine to leave it like that.
         camera={{
           near: 1,
           position: [-250, 250 + magicValues.pointOfViewFix, -250],
@@ -304,6 +303,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
             })}
         shadows="basic"
       >
+        <color attach="background" args={[autoplay ? '#1f0014' : theme.background(index)]} />
         <CameraController
           previousTile={previousTile}
           isStarted={isStarted}
@@ -347,6 +347,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         <PerfectEffects effects={effectsPossiblySliced} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
       </Canvas>
+      <Greeting index={index} isStarted={isStarted} />
+      <Score index={index} isEnded={isEnded} />
       <GameEndingMemoized
         isStarted={isStarted}
         isEnded={isEnded}
