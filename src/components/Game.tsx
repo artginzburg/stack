@@ -346,6 +346,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         </Physics>
         <PerfectEffects effects={effectsPossiblySliced} setEffects={setEffects} />
         {debug && <OrbitControls target={previousTile.position} />}
+        {/* TODO think about pre-loading everything. In reality, I suppose, it just makes all the objects wait for each other to finish loading before starting the scene and rendering. This makes the BaseTile look like it does not flash on load, but adds a significant amount of time to the first appearance of all of the Canvas. */}
+        {/* <Preload all /> */}
       </Canvas>
       <Greeting index={index} isStarted={isStarted} />
       <Score index={index} isEnded={isEnded} />

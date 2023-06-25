@@ -24,6 +24,7 @@ export function BaseTile() {
   }));
 
   return (
+    // TODO think about adding `frustumCulled={false}` to this mesh. Otherwise, it gets clipped of at the bottom, after the zoom out is activated. P.S. Actually, why don't we just set it to false only when the game is ended and zoomed out? Perfect.
     <mesh ref={ref} receiveShadow>
       <boxGeometry args={boxArgs} />
       <meshPhongMaterial color={theme.tile(-1)} />
