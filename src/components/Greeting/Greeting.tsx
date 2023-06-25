@@ -113,11 +113,23 @@ function GreetingTitle({
   );
 }
 
+const isOnSubDomain = true;
+
 function GreetingLinks({ className }: { className: string }) {
   const { theme } = useTheme();
 
   const repoUrl = useMemo(() => new URL(`https://github.com/${packageJson.repository}`), []);
-  const authorUrl = useMemo(() => new URL(new URL(packageJson.homepage).origin), []);
+  const authorUrl = useMemo(() => {
+    if (!isOnSubDomain) return new URL(new URL(packageJson.homepage).origin);
+
+    const theUrl = new URL(packageJson.homepage);
+
+    const separator = '.';
+    const hostnameSplitByDot = theUrl.hostname.split(separator);
+    hostnameSplitByDot.shift();
+    theUrl.hostname = hostnameSplitByDot.join(separator);
+    return theUrl;
+  }, []);
 
   const repoDomainWithoutLevelOne = useMemo(() => getDomainWithoutLevel(repoUrl), [repoUrl]);
 
