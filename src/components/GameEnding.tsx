@@ -49,6 +49,8 @@ export function GameEnding({
           letterSpacing: 1,
 
           bottom: '4rem',
+
+          pointerEvents: 'none',
         }}
       >
         {tapOrClickBefore} to restart

@@ -24,6 +24,8 @@ export function GameEndingHighScore({
 
         fontSize: '2rem',
         top: `${5 + 2 + 1}rem`, // `5 + 2` is `size + top` of Score.
+
+        pointerEvents: 'none',
       }}
     >
       {isHighScoreNew ? 'New high score!' : `Best: ${highScore}`}

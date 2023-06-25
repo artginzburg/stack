@@ -14,6 +14,8 @@ export function Score({ index, isEnded }: { index: number; isEnded: boolean }) {
 
         fontSize: '5rem',
         top: '2rem',
+
+        pointerEvents: 'none',
       }}
     >
       {isEnded ? Number(index) : index || ''}

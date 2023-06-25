@@ -62,6 +62,8 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
           fontSize: '1rem',
           top: `${headingTop + headingSize + 2}rem`,
           letterSpacing: 1,
+
+          pointerEvents: 'none',
         }}
       >
         {tapOrClickBefore} to start
@@ -104,6 +106,8 @@ function GreetingTitle({
 
         // @ts-expect-error valid custom CSS property
         '--animationDuration': slowDown ? '4s' : undefined,
+
+        pointerEvents: 'none',
       }}
     >
       <p>{title}</p>
