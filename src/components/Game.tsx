@@ -26,6 +26,7 @@ import { Score } from './Score';
 import { ReactTile, TileProps } from './Tile';
 import { PreviousTile } from './types';
 import { useInitVisitInSession } from '../features/firstVisitInSession';
+import { ColorSystemTests } from './ColorSystemTests';
 
 const gameConfig = {
   physics: {
@@ -358,8 +359,11 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         thisGameStats={thisGameStats}
         globalStats={globalStats}
       />
+      <ColorSystemTestsMemoized />
     </div>
   );
 }
 
 const GameEndingMemoized = memo(GameEnding);
+
+const ColorSystemTestsMemoized = memo(ColorSystemTests);
