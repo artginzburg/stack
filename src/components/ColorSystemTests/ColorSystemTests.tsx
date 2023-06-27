@@ -1,25 +1,26 @@
 import { useEffect, useState } from 'react';
 
 import { HSLColor } from './classes/HSLColor';
+import { Random } from './classes/Random';
+import { chance } from './functions/chance';
 
-const changeIntensities = {
-  hue: 5,
-  saturation: 4,
-  lightness: 4,
+const hslLimits = {
+  saturation: {
+    min: 10,
+    max: 100,
+  },
+  lightness: {
+    min: 5,
+    max: 85,
+  },
 };
 
 export function ColorSystemTests() {
-  const [tiles, setTiles] = useState<Tile[]>([
-    { color: HSLColor.getRandom(), applier: getRandomApplier() },
-  ]);
+  const [tiles, setTiles] = useState<Tile[]>([getFirstTile()]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTiles((prev) => {
-        const tile = newTile(prev.at(-1)!);
-
-        return [...prev, tile];
-      });
+      setTiles((prev) => [...prev, nextTile(prev.at(-1)!)]);
     }, 30);
 
     return () => {
@@ -45,11 +46,7 @@ export function ColorSystemTests() {
           Array(5)
             .fill(1)
             .forEach(() => {
-              setTiles((prev) => {
-                const tile = newTile(prev.at(-1)!);
-
-                return [...prev, tile];
-              });
+              setTiles((prev) => [...prev, nextTile(prev.at(-1)!)]);
             });
         }}
       >
@@ -57,7 +54,7 @@ export function ColorSystemTests() {
       </button>
       <button
         onClick={() => {
-          setTiles((prev) => [prev.at(1)!]);
+          setTiles((prev) => [prev.at(0)!]);
         }}
       >
         Clear
@@ -69,83 +66,76 @@ export function ColorSystemTests() {
   );
 }
 
-function getRandomApplier() {
-  // return either 0, 5, 5 or 0, -5, -5 or 0, 5, 0 or 0, 0, 5 or 0, -5, 0 or 0, 0, -5
-  const lightness = chance(0.5) ? changeIntensities.lightness : 0;
-  const saturation =
-    lightness === 0 ? changeIntensities.saturation : chance(0.5) ? changeIntensities.saturation : 0;
-  const finalLightness = chance(0.5) ? lightness : -lightness;
-  const finalSaturation = chance(0.5) ? saturation : -saturation;
-
-  return new HSLColor(0, finalSaturation, finalLightness);
-}
-
 function TileRenderer({ tile }: { tile: Tile }) {
   return (
     <div
       style={{
         width: '100%',
         height: '40px',
-        background: tile.color.toString(),
+        background: tile.currentColor.toString(),
       }}
     />
   );
 }
 
-const hslLimits = {
-  saturation: {
-    min: 25,
-    max: 70,
-  },
-  lightness: {
-    min: 30,
-    max: 60,
-  },
-};
+function getFirstTile(): Tile {
+  const initialAndCurrent = getRandomColorWithinLimits(hslLimits);
+  const target = getRandomColorWithinLimits(hslLimits);
 
-function newTile(prev: Tile): Tile {
-  // first check that the prev color is not on the limit
-  const prevColor = prev.color;
+  return {
+    initialColor: initialAndCurrent,
+    currentColor: initialAndCurrent,
+    targetColor: target,
+  };
+}
 
-  const tooLight = prevColor.l > hslLimits.lightness.max;
-  const tooDark = prevColor.l < hslLimits.lightness.min;
-  const tooSaturated = prevColor.s > hslLimits.saturation.max;
-  const tooDesaturated = prevColor.s < hslLimits.saturation.min;
+const flipHue = new HSLColor(180, 0, 0);
 
-  if (tooLight || tooDark || tooSaturated || tooDesaturated) {
-    // we need to create a new pattern
-    const hueApplier = chance(0.5) ? changeIntensities.hue : 0;
+function nextTile(prevTile: Tile): Tile {
+  const nextCachedDifferenceStep =
+    prevTile.cachedDifferenceStep ?? getNewCachedDifferenceStep(prevTile);
 
-    let saturationApplier = prev.applier.s;
-    if (tooSaturated) saturationApplier = -changeIntensities.saturation;
-    else if (tooDesaturated) saturationApplier = changeIntensities.saturation;
+  const newTile: Tile = {
+    initialColor: prevTile.initialColor.clone(),
+    currentColor: prevTile.currentColor.clone().add(nextCachedDifferenceStep),
+    targetColor: prevTile.targetColor.clone(),
+    cachedDifferenceStep: nextCachedDifferenceStep,
+  };
 
-    let lightApplier = prev.applier.l;
-    if (tooLight) lightApplier = -changeIntensities.lightness;
-    else if (tooDark) lightApplier = changeIntensities.lightness;
+  const reachedTarget = newTile.currentColor.clone().round().equals(newTile.targetColor);
+  if (reachedTarget) {
+    newTile.initialColor = newTile.currentColor;
 
-    const colorModifier = new HSLColor(hueApplier, saturationApplier, lightApplier);
+    /** For some reason, this made the colors seemingly go into shuffle mode sometimes. Disabled for now. */
+    const probabilityToJustFlipHueInsteadOfRandomizing = 0;
 
-    return {
-      color: prevColor.clone().add(colorModifier),
-      applier: new HSLColor(
-        chance(0.3) ? changeIntensities.hue : 0,
-        saturationApplier,
-        lightApplier,
-      ),
-    };
-  } else {
-    // we can continue the pattern
-    const nextColor = prevColor.clone().add(prev.applier);
-    return { color: nextColor, applier: prev.applier };
+    newTile.targetColor = chance(probabilityToJustFlipHueInsteadOfRandomizing)
+      ? newTile.targetColor.add(flipHue)
+      : getRandomColorWithinLimits(hslLimits);
+
+    newTile.cachedDifferenceStep = getNewCachedDifferenceStep(newTile);
   }
+
+  return newTile;
+}
+
+function getNewCachedDifferenceStep(tile: Tile): HSLColor {
+  return tile.initialColor
+    .clone()
+    .difference(tile.targetColor)
+    .divScalar(Random.getInRange(10, 30));
+}
+
+function getRandomColorWithinLimits(limits: typeof hslLimits) {
+  const hue = Random.getFromZeroTo(360);
+  const saturation = Random.getInRange(limits.saturation.min, limits.saturation.max);
+  const lightness = Random.getInRange(limits.lightness.min, limits.lightness.max);
+  return new HSLColor(hue, saturation, lightness);
 }
 
 interface Tile {
-  color: HSLColor;
-  applier: HSLColor;
-}
-
-function chance(probability: number) {
-  return Math.random() < probability;
+  initialColor: HSLColor;
+  currentColor: HSLColor;
+  targetColor: HSLColor;
+  cachedDifferenceStep?: HSLColor;
 }
