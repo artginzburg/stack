@@ -26,6 +26,7 @@ import { Score } from './Score';
 import { ReactTile, TileProps } from './Tile';
 import { PreviousTile } from './types';
 import { useInitVisitInSession } from '../features/firstVisitInSession';
+import { useMinimumActionInterval } from '../hooks/useMinimumActionInterval';
 
 const gameConfig = {
   physics: {
@@ -264,7 +265,11 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     resetThisGameStats();
   }
 
+  const { preventActionOrPrepareAndContinue } = useMinimumActionInterval(50);
+
   function act() {
+    if (preventActionOrPrepareAndContinue()) return;
+
     if (isEnded) {
       reset();
       return;
