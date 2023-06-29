@@ -27,6 +27,7 @@ import { ReactTile, TileProps } from './Tile';
 import { PreviousTile } from './types';
 import { useInitVisitInSession } from '../features/firstVisitInSession';
 import { useMinimumActionInterval } from '../hooks/useMinimumActionInterval';
+import originalGreetingImage from '../images/original_greeting.png';
 
 const gameConfig = {
   physics: {
@@ -43,23 +44,26 @@ const gameConfig = {
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const { theme, setThemeName } = useTheme();
 
-  const { invertGravity, speedOfMovingTile, debugPhysics } = useControls({
-    invertGravity: false,
-    speedOfMovingTile: {
-      /** So that the interval between perfect taps is 800ms, like in the original game. */
-      value: 160,
-      step: 1,
+  const { invertGravity, speedOfMovingTile, debugPhysics, displayOriginalGameImages } = useControls(
+    {
+      invertGravity: false,
+      speedOfMovingTile: {
+        /** So that the interval between perfect taps is 800ms, like in the original game. */
+        value: 160,
+        step: 1,
+      },
+      debugPhysics: {
+        label: 'Debug Physics',
+        value: false,
+      },
+      theme: {
+        value: theme.name,
+        onChange: setThemeName,
+        options: themes.map((themeEl) => themeEl.name),
+      },
+      displayOriginalGameImages: false,
     },
-    debugPhysics: {
-      label: 'Debug Physics',
-      value: false,
-    },
-    theme: {
-      value: theme.name,
-      onChange: setThemeName,
-      options: themes.map((themeEl) => themeEl.name),
-    },
-  });
+  );
 
   const {
     thisGameStats,
@@ -364,6 +368,20 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         thisGameStats={thisGameStats}
         globalStats={globalStats}
       />
+      {displayOriginalGameImages && (
+        <img
+          src={originalGreetingImage}
+          alt="Original game greeting"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '320px',
+            opacity: 0.5,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -14,7 +14,7 @@ export const sharedStyleProps: React.CSSProperties = {
   width: '100%',
 
   fontWeight: 100,
-  letterSpacing: 2.5,
+  letterSpacing: 0.3,
   textTransform: 'uppercase',
 
   position: 'fixed',
@@ -39,7 +39,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
     }
   }
 
-  const headingTop = 5;
+  const headingTop = 6.25;
   const headingSize = 4;
 
   const fadeOutClassName = isStarted || index ? 'fadeOut' : null;
@@ -59,9 +59,9 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
           color: theme.lightElements,
           animationDelay: '0.2s',
           animationDuration: '0.25s',
-          fontSize: '1rem',
-          top: `${headingTop + headingSize + 2}rem`,
-          letterSpacing: 1,
+          fontSize: '1.3rem',
+          top: `${headingTop + headingSize + 1.3}rem`,
+          letterSpacing: 0,
 
           pointerEvents: 'none',
         }}
