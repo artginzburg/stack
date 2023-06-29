@@ -39,8 +39,8 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
     }
   }
 
-  const headingTop = 6.25;
-  const headingSize = 4;
+  const headingTop = 7.27;
+  const headingSize = 4.66;
 
   const fadeOutClassName = isStarted || index ? 'fadeOut' : null;
   const className = ['greeting', fadeOutClassName].filter(Boolean).join(' ');
@@ -59,9 +59,9 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
           color: theme.lightElements,
           animationDelay: '0.2s',
           animationDuration: '0.25s',
-          fontSize: '1.3rem',
-          top: `${headingTop + headingSize + 1.3}rem`,
-          letterSpacing: 0,
+          fontSize: '1.56rem',
+          top: `${headingTop + headingSize + 1.62}rem`,
+          letterSpacing: -0.15,
 
           pointerEvents: 'none',
         }}

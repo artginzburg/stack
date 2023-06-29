@@ -376,7 +376,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
             position: 'fixed',
             top: 0,
             left: 0,
-            width: '320px',
+            width: 375,
             opacity: 0.5,
             pointerEvents: 'none',
           }}

@@ -111,9 +111,9 @@ function HowToPlayOpenButton({
 
   const buttonSizing = 0.5;
 
-  const visualOffsetFromScreenEdge = 35 * buttonSizing;
+  const visualOffsetFromScreenEdge = 42 * buttonSizing;
 
-  const buttonSize = 50 * buttonSizing;
+  const buttonSize = 58 * buttonSizing;
 
   const padding = buttonSize * 0.6; // Look at https://github.com/artginzburg/stack/issues/22#issue-1780014221 for the explanation on why 60%.
 
@@ -146,7 +146,7 @@ function HowToPlayOpenButton({
           justifyContent: 'center',
           alignItems: 'center',
           color: theme.lightElements,
-          fontSize: 42 * buttonSizing,
+          fontSize: 48 * buttonSizing,
           paddingTop: 2,
           fontFamily: `'Lucida Sans', Arial, sans-serif`, // The dot in the bottom of the question mark should be square. Fonts were chosen by that matter.
 
