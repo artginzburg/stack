@@ -38,31 +38,47 @@ function ThisGameStatsOpenButton({
 }) {
   const { theme } = useTheme();
 
+  const approximateButtonHeight = 1;
+  const invisiblePaddingRem = approximateButtonHeight * 0.6; // Look at https://github.com/artginzburg/stack/issues/22#issue-1780014221 for the explanation on why 60%.
+
+  const visualOffsetFromScreenEdge = 1;
+  const leftAndBottom = `${visualOffsetFromScreenEdge - invisiblePaddingRem}rem`;
+
   return (
     <button
-      className={className + ' viewStatsButton'}
+      className={className}
       onClick={onClick}
       style={{
         ...sharedStyleProps,
         ...resetButtonStyles,
 
         width: 'auto',
-        backgroundColor: theme.lightElements,
-        color: theme.background(NaN),
-        animationDuration: '0.25s',
-        fontSize: '0.9rem',
-        letterSpacing: 1,
 
-        // #region copied from Greeting.css: `.links`
-        padding: '0.1em 0.5em',
-        borderRadius: '0.4em',
-        bottom: '1rem',
-        // #endregion
+        left: leftAndBottom,
+        bottom: leftAndBottom,
 
-        left: '1rem',
+        padding: `${invisiblePaddingRem}rem`,
+        // TODO? add padding-inline
       }}
     >
-      stats
+      <div
+        className="viewStatsButton"
+        style={{
+          backgroundColor: theme.lightElements,
+          color: theme.background(NaN),
+          animationDuration: '0.25s',
+          fontSize: '0.9rem',
+          letterSpacing: 1,
+
+          // #region copied from Greeting.css: `.links`
+          padding: '0.1em 0.5em',
+          borderRadius: '0.4em',
+          // bottom: '1rem',
+          // #endregion
+        }}
+      >
+        stats
+      </div>
     </button>
   );
 }

@@ -109,7 +109,13 @@ function HowToPlayOpenButton({
 }) {
   const { theme } = useTheme();
 
-  const buttonSize = 0.5;
+  const buttonSizing = 0.5;
+
+  const visualOffsetFromScreenEdge = 41 * buttonSizing;
+
+  const buttonSize = 58 * buttonSizing;
+
+  const padding = buttonSize * 0.6; // Look at https://github.com/artginzburg/stack/issues/22#issue-1780014221 for the explanation on why 60%.
 
   return (
     <button
@@ -117,30 +123,36 @@ function HowToPlayOpenButton({
       className={className}
       style={{
         ...resetButtonStyles,
-        cursor: 'pointer',
-
-        animationDelay: '0.2s',
-        animationDuration: '0.25s',
-
         position: 'fixed',
-        top: 41 * buttonSize,
-        left: 41 * buttonSize,
+        top: visualOffsetFromScreenEdge - padding,
+        left: visualOffsetFromScreenEdge - padding,
 
-        borderRadius: '100%',
-        border: `${theme.lightElements} ${4 * buttonSize}px solid`,
-        height: 58 * buttonSize,
-        width: 58 * buttonSize,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: theme.lightElements,
-        fontSize: 50 * buttonSize,
-        fontFamily: `'Lucida Sans', Arial, sans-serif`, // The dot in the bottom of the question mark should be square. Fonts were chosen by that matter.
-
-        zIndex: 1,
+        padding,
       }}
     >
-      ?
+      <div
+        style={{
+          cursor: 'pointer',
+
+          animationDelay: '0.2s',
+          animationDuration: '0.25s',
+
+          borderRadius: '100%',
+          border: `${theme.lightElements} ${4 * buttonSizing}px solid`,
+          height: buttonSize,
+          width: buttonSize,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: theme.lightElements,
+          fontSize: 50 * buttonSizing,
+          fontFamily: `'Lucida Sans', Arial, sans-serif`, // The dot in the bottom of the question mark should be square. Fonts were chosen by that matter.
+
+          zIndex: 1,
+        }}
+      >
+        ?
+      </div>
     </button>
   );
 }
