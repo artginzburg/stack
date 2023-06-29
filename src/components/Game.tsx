@@ -45,7 +45,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
   const { invertGravity, speedOfMovingTile, debugPhysics } = useControls({
     invertGravity: false,
     speedOfMovingTile: {
-      value: 157,
+      /** So that the interval between perfect taps is 800ms, like in the original game. */
+      value: 160,
       step: 1,
     },
     debugPhysics: {
