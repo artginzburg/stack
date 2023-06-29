@@ -139,6 +139,7 @@ function HowToPlayOpenButton({
 
           borderRadius: '100%',
           border: `${theme.lightElements} ${4 * buttonSizing}px solid`,
+          boxSizing: 'border-box',
           height: buttonSize,
           width: buttonSize,
           display: 'flex',
