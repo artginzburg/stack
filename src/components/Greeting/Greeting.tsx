@@ -119,6 +119,14 @@ function GreetingTitle({
 
 const isOnSubDomain = true;
 
+const isLocalhost = Boolean(
+  window.location.hostname === 'localhost' ||
+    // [::1] is the IPv6 localhost address.
+    window.location.hostname === '[::1]' ||
+    // 127.0.0.0/8 are considered localhost for IPv4.
+    window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/),
+);
+
 function GreetingLinks({ className }: { className: string }) {
   const { theme } = useTheme();
 
@@ -137,6 +145,11 @@ function GreetingLinks({ className }: { className: string }) {
 
   const repoDomainWithoutLevelOne = useMemo(() => getDomainWithoutLevel(repoUrl), [repoUrl]);
 
+  const openInNewTabProps: Pick<JSX.IntrinsicElements['a'], 'target' | 'rel'> = {
+    target: '_blank',
+    rel: 'noreferrer',
+  };
+
   return (
     <div
       className={className + ' links'}
@@ -154,8 +167,11 @@ function GreetingLinks({ className }: { className: string }) {
         zIndex: 1,
       }}
     >
-      <a href={repoUrl.href}>{repoDomainWithoutLevelOne}</a> /{' '}
-      <a href={authorUrl.href} target="_blank" rel="noreferrer">
+      <a href={repoUrl.href} {...(isLocalhost ? openInNewTabProps : undefined)}>
+        {repoDomainWithoutLevelOne}
+      </a>{' '}
+      /{' '}
+      <a href={authorUrl.href} {...openInNewTabProps}>
         {authorUrl.hostname}
       </a>
     </div>
