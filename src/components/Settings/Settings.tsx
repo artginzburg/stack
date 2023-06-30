@@ -7,6 +7,7 @@ import { resetButtonStyles } from '../../tools/stylesToolkit';
 import { repoUrl } from '../../shared/metaInfo';
 import { ModalDefault } from '../ModalDefault';
 import './Settings.css';
+import { ServiceWorkerUpdateChecker } from '../ServiceWorkerUpdateChecker';
 
 export function Settings({ className }: { className: string }) {
   const [isOpened, setIsOpened] = useState(false);
@@ -83,6 +84,7 @@ export function SettingsModal({
           {gitCommitDateAsString}
         </span>
       </p>
+      <ServiceWorkerUpdateChecker />
     </ModalDefault>
   );
 }
