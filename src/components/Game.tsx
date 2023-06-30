@@ -28,6 +28,7 @@ import { PreviousTile } from './types';
 import { useInitVisitInSession } from '../features/firstVisitInSession';
 import { useMinimumActionInterval } from '../hooks/useMinimumActionInterval';
 import originalGreetingImage from '../images/original_greeting.png';
+import { AllStatisticsProps } from './ThisGameStats/ThisGameStats';
 
 const gameConfig = {
   physics: {
@@ -359,6 +360,40 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         {/* TODO think about pre-loading everything. In reality, I suppose, it just makes all the objects wait for each other to finish loading before starting the scene and rendering. This makes the BaseTile look like it does not flash on load, but adds a significant amount of time to the first appearance of all of the Canvas. */}
         {/* <Preload all /> */}
       </Canvas>
+      <UILayerMemoized
+        {...{
+          index,
+          isStarted,
+          isEnded,
+          isHighScoreNew,
+          displayOriginalGameImages,
+          thisGameStats,
+          globalStats,
+        }}
+      />
+    </div>
+  );
+}
+
+const UILayerMemoized = memo(UILayer);
+
+function UILayer({
+  index,
+  isStarted,
+  isEnded,
+  isHighScoreNew,
+  displayOriginalGameImages,
+  thisGameStats,
+  globalStats,
+}: {
+  index: number;
+  isStarted: boolean;
+  isEnded: boolean;
+  isHighScoreNew: boolean;
+  displayOriginalGameImages: boolean;
+} & AllStatisticsProps) {
+  return (
+    <>
       <GreetingMemoized index={index} isStarted={isStarted} />
       <ScoreMemoized index={index} isEnded={isEnded} />
       <GameEndingMemoized
@@ -382,7 +417,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
           }}
         />
       )}
-    </div>
+    </>
   );
 }
 
