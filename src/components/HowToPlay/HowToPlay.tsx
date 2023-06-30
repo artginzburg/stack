@@ -119,6 +119,7 @@ function HowToPlayOpenButton({
 
   return (
     <button
+      type="button"
       onClick={onClick}
       className={className}
       style={{

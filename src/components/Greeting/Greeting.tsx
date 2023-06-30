@@ -4,8 +4,10 @@ import { useMemo, useState } from 'react';
 
 import packageJson from '../../../package.json';
 import { tapOrClickBefore } from '../../shared/texts';
+import { repoUrl } from '../../shared/metaInfo';
 import { useTheme } from '../../contexts/ThemeContext';
 import { HowToPlay } from '../HowToPlay';
+import { Settings } from '../Settings';
 import { useIsFirstVisitInSession } from '../../features/firstVisitInSession';
 
 /** @todo rename to sharedTextProps */
@@ -70,6 +72,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
       </div>
       <HowToPlay className={className} />
       <GreetingLinks className={className} />
+      <Settings className={className} />
     </>
   );
 }
@@ -130,7 +133,6 @@ const isLocalhost = Boolean(
 function GreetingLinks({ className }: { className: string }) {
   const { theme } = useTheme();
 
-  const repoUrl = useMemo(() => new URL(`https://github.com/${packageJson.repository}`), []);
   const authorUrl = useMemo(() => {
     if (!isOnSubDomain) return new URL(new URL(packageJson.homepage).origin);
 
@@ -143,7 +145,7 @@ function GreetingLinks({ className }: { className: string }) {
     return theUrl;
   }, []);
 
-  const repoDomainWithoutLevelOne = useMemo(() => getDomainWithoutLevel(repoUrl), [repoUrl]);
+  const repoDomainWithoutLevelOne = useMemo(() => getDomainWithoutLevel(repoUrl), []);
 
   const openInNewTabProps: Pick<JSX.IntrinsicElements['a'], 'target' | 'rel'> = {
     target: '_blank',

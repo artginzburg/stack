@@ -46,6 +46,7 @@ function ThisGameStatsOpenButton({
 
   return (
     <button
+      type="button"
       className={className}
       onClick={onClick}
       style={{
