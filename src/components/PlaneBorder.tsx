@@ -13,51 +13,31 @@ export function PlaneBorder({
   const height = size?.[1]!;
 
   return (
-    <>
+    <group position={positionAsTuple}>
       <Plane
         {...props}
         args={[width + borderWidth * 2, borderWidth]}
-        position={[
-          positionAsTuple[0],
-          positionAsTuple[1],
-          positionAsTuple[2] + height / 2 + borderWidth / 2,
-        ]}
+        position={[0, 0, height / 2 + borderWidth / 2]}
       >
         {children}
       </Plane>
       <Plane
         {...props}
         args={[width + borderWidth * 2, borderWidth]}
-        position={[
-          positionAsTuple[0],
-          positionAsTuple[1],
-          positionAsTuple[2] - height / 2 - borderWidth / 2,
-        ]}
+        position={[0, 0, -height / 2 - borderWidth / 2]}
       >
+        {children}
+      </Plane>
+      <Plane {...props} args={[borderWidth, height]} position={[width / 2 + borderWidth / 2, 0, 0]}>
         {children}
       </Plane>
       <Plane
         {...props}
         args={[borderWidth, height]}
-        position={[
-          positionAsTuple[0] + width / 2 + borderWidth / 2,
-          positionAsTuple[1],
-          positionAsTuple[2],
-        ]}
+        position={[-width / 2 - borderWidth / 2, 0, 0]}
       >
         {children}
       </Plane>
-      <Plane
-        {...props}
-        args={[borderWidth, height]}
-        position={[
-          positionAsTuple[0] - width / 2 - borderWidth / 2,
-          positionAsTuple[1],
-          positionAsTuple[2],
-        ]}
-      >
-        {children}
-      </Plane>
-    </>
+    </group>
   );
 }
