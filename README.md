@@ -11,6 +11,20 @@ Just saw [KonradLinkowski/Stack][threejs-version], and decided to rewrite it fro
 
 > It's my first try at games, and the first glance at 3D from a dev's perspective (tried 3ds Max before, that's all).
 
+## Motivation
+
+### Aim
+
+This project aims to be a functionally and visually exact copy of the original game. The intention is to train the reverse design and system architecture skills of the contributors.
+
+### Exceptions
+
+Though, if there's something to improve (i.e. add without disturbing the visual and functional consistency) in the original — it may be an exception. A good example of such  platform-specific capability that adds without modifying the concept is adapting to large screens: as this runs in Web, there's no reason to force the portrait viewport orientation.
+
+Another thing I already implemented is statistics display. I'm almost sure that the original collects some sort of stats to improve the future games of the studio, but there's no way for the player to see their collected stats.
+
+When the theming support is finished, I'd like to add more available customizations for new themes, like the ability to invert gravity (that already exists in dev mode).
+
 ## Enhancements
 
 > over the [Three.js version][threejs-version]
