@@ -29,6 +29,7 @@ import { useInitVisitInSession } from '../features/firstVisitInSession';
 import { useMinimumActionInterval } from '../hooks/useMinimumActionInterval';
 import originalGreetingImage from '../images/original_greeting.png';
 import { AllStatisticsProps } from './ThisGameStats/ThisGameStats';
+import { TileColor, getFirstTileColor, getNextTileColor } from './ColorSystemTests';
 
 const gameConfig = {
   physics: {
@@ -44,6 +45,13 @@ const gameConfig = {
 
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const { theme, setThemeName } = useTheme();
+
+  const firstTileColor = getFirstTileColor();
+
+  const [tileColors, setTileColors] = useState<TileColor[]>([
+    firstTileColor,
+    getNextTileColor(firstTileColor),
+  ]);
 
   const { invertGravity, speedOfMovingTile, debugPhysics, displayOriginalGameImages } = useControls(
     {
@@ -231,6 +239,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         }
       : newStaticTile;
 
+    setTileColors((prev) => [...prev, getNextTileColor(prev.at(-1)!)]);
+
     setStaticTiles((prev) => [...prev, newOrEnlargedStaticTile]);
 
     updateAllStatsOnCutBox(errorPercentage, isConsideredPerfect);
@@ -268,6 +278,9 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     setEffects([]);
     setIsHighScoreNew(false);
     resetThisGameStats();
+
+    const newFirstTileColor = getFirstTileColor();
+    setTileColors([newFirstTileColor, getNextTileColor(newFirstTileColor)]);
   }
 
   const { preventActionOrPrepareAndContinue } = useMinimumActionInterval(50);
@@ -331,6 +344,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
             autoplay={autoplay}
             lastCube={staticTiles.at(-1)}
             speedOfMovingTile={speedOfMovingTile}
+            tileColors={tileColors}
           />
         )}
         <Physics
@@ -344,15 +358,16 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
           }}
         >
           <ConditionalWrapper condition={debugPhysics} Wrapper={Debug}>
-            <BaseTile />
+            <BaseTile tileColors={tileColors} />
             {staticTilesPossiblySliced.map((tile, tileArrIndex) => (
               <ReactTile
                 key={tile.index}
                 {...tile}
                 prevSize={staticTilesPossiblySliced[tileArrIndex - 1]?.size}
+                tileColors={tileColors}
               />
             ))}
-            <FadingTiles fadingTiles={fadingTilesPossiblySliced} />
+            <FadingTiles fadingTiles={fadingTilesPossiblySliced} tileColors={tileColors} />
           </ConditionalWrapper>
         </Physics>
         <PerfectEffects effects={effectsPossiblySliced} setEffects={setEffects} />

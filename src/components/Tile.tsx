@@ -2,7 +2,6 @@ import { Triplet, useBox } from '@react-three/cannon';
 import { useMemo, useState } from 'react';
 import { Mesh, Vector2, Vector3 } from 'three';
 
-import { useTheme } from '../contexts/ThemeContext';
 import {
   AnimatedTileProps,
   getAnimatedTileAddedPosition,
@@ -10,6 +9,7 @@ import {
   useTileGrowingAnimation,
 } from '../features/animatedGrowingTile';
 import { config } from '../shared/constants';
+import { TileColor } from './ColorSystemTests';
 
 export interface TileProps extends AnimatedTileProps {
   position: Vector3;
@@ -24,14 +24,13 @@ export function ReactTile({
   createdAt,
   prevSize,
   addedPositionSign,
-}: TileProps & { prevSize: TileProps['size'] | undefined }) {
+  tileColors,
+}: TileProps & { prevSize: TileProps['size'] | undefined } & { tileColors: TileColor[] }) {
   if (process.env.NODE_ENV !== 'production') {
     // I know for sure that NODE_ENV is never going to change during one run of the game script, so it's OK to have a conditional hook:
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useRunDevOnlyTestsForTile({ position, size, index });
   }
-
-  const { theme } = useTheme();
 
   const { shouldAnimate, addedSize, sizeDifference } = useTileGrowingAnimation({
     createdAt,
@@ -69,7 +68,7 @@ export function ReactTile({
 
   return (
     <mesh ref={ref} castShadow receiveShadow>
-      <meshPhongMaterial color={theme.tile(index)} />
+      <meshPhongMaterial color={tileColors[index + 1].currentColor.toString()} />
       <boxGeometry args={boxArgs} />
     </mesh>
   );

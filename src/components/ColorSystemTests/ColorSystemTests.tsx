@@ -16,11 +16,11 @@ const hslLimits = {
 };
 
 export function ColorSystemTests() {
-  const [tiles, setTiles] = useState<Tile[]>([getFirstTile()]);
+  const [tiles, setTiles] = useState<TileColor[]>([getFirstTileColor()]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTiles((prev) => [...prev, nextTile(prev.at(-1)!)]);
+      setTiles((prev) => [...prev, getNextTileColor(prev.at(-1)!)]);
     }, 30);
 
     return () => {
@@ -46,7 +46,7 @@ export function ColorSystemTests() {
           Array(5)
             .fill(1)
             .forEach(() => {
-              setTiles((prev) => [...prev, nextTile(prev.at(-1)!)]);
+              setTiles((prev) => [...prev, getNextTileColor(prev.at(-1)!)]);
             });
         }}
       >
@@ -66,7 +66,7 @@ export function ColorSystemTests() {
   );
 }
 
-function TileRenderer({ tile }: { tile: Tile }) {
+function TileRenderer({ tile }: { tile: TileColor }) {
   return (
     <div
       style={{
@@ -78,7 +78,7 @@ function TileRenderer({ tile }: { tile: Tile }) {
   );
 }
 
-function getFirstTile(): Tile {
+export function getFirstTileColor(): TileColor {
   const initialAndCurrent = getRandomColorWithinLimits(hslLimits);
   const target = getRandomColorWithinLimits(hslLimits);
 
@@ -91,11 +91,11 @@ function getFirstTile(): Tile {
 
 const flipHue = new HSLColor(180, 0, 0);
 
-function nextTile(prevTile: Tile): Tile {
+export function getNextTileColor(prevTile: TileColor): TileColor {
   const nextCachedDifferenceStep =
     prevTile.cachedDifferenceStep ?? getNewCachedDifferenceStep(prevTile);
 
-  const newTile: Tile = {
+  const newTile: TileColor = {
     initialColor: prevTile.initialColor.clone(),
     currentColor: prevTile.currentColor.clone().add(nextCachedDifferenceStep),
     targetColor: prevTile.targetColor.clone(),
@@ -119,7 +119,7 @@ function nextTile(prevTile: Tile): Tile {
   return newTile;
 }
 
-function getNewCachedDifferenceStep(tile: Tile): HSLColor {
+function getNewCachedDifferenceStep(tile: TileColor): HSLColor {
   return tile.initialColor
     .clone()
     .difference(tile.targetColor)
@@ -133,7 +133,7 @@ function getRandomColorWithinLimits(limits: typeof hslLimits) {
   return new HSLColor(hue, saturation, lightness);
 }
 
-interface Tile {
+export interface TileColor {
   initialColor: HSLColor;
   currentColor: HSLColor;
   targetColor: HSLColor;
