@@ -28,7 +28,8 @@ export function GameEndingHighScore({
         pointerEvents: 'none',
       }}
     >
-      {isHighScoreNew ? 'New high score!' : `Best: ${highScore}`}
+      {/* TODO icon instead of Best: */}
+      {isHighScoreNew ? 'New record' : `Best: ${highScore}`}
     </div>
   ) : null;
 }

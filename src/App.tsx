@@ -1,8 +1,9 @@
 import { Leva, useControls } from 'leva';
-import { useEventListener } from 'usehooks-ts';
+import { useDocumentTitle, useEventListener } from 'usehooks-ts';
 
 import { Game } from './components/Game';
 import { ThemeInitializer } from './contexts/ThemeContext';
+import { getNonProductionDocumentTitle } from './shared/documentTitle';
 
 function App() {
   const [{ autoplay }, set] = useControls(() => ({
@@ -10,6 +11,11 @@ function App() {
   }));
 
   const isNotProduction = process.env.NODE_ENV !== 'production';
+
+  if (isNotProduction) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useDocumentTitle(getNonProductionDocumentTitle());
+  }
 
   return (
     <>

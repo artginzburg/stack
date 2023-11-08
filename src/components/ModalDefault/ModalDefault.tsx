@@ -38,6 +38,7 @@ export function ModalDefault({
         }}
       >
         <button
+          type="button"
           className="modalDefaultCloseButton"
           style={{
             ...resetButtonStyles,

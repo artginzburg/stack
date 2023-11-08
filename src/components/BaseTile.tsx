@@ -7,16 +7,18 @@ import { config } from '../shared/constants';
 export function BaseTile() {
   const { theme } = useTheme();
 
+  const initialBoxHeight = 530; // TODO set to 170 (config.tileHeight * 10) after the gradient is implemented, as it seems to be exactly the value used in the original game.
+
   const boxArgs: Triplet = [
     100,
-    530 - config.tileHeight, // 500
+    initialBoxHeight - config.tileHeight, // 500
     100,
   ];
 
   const [ref] = useBox<Mesh>(() => ({
     position: [
       0,
-      -265, // -245
+      -initialBoxHeight / 2, // -245
       0,
     ],
     type: 'Static',

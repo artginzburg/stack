@@ -4,8 +4,10 @@ import { useMemo, useState } from 'react';
 
 import packageJson from '../../../package.json';
 import { tapOrClickBefore } from '../../shared/texts';
+import { repoUrl } from '../../shared/metaInfo';
 import { useTheme } from '../../contexts/ThemeContext';
 import { HowToPlay } from '../HowToPlay';
+import { Settings } from '../Settings';
 import { useIsFirstVisitInSession } from '../../features/firstVisitInSession';
 
 /** @todo rename to sharedTextProps */
@@ -14,7 +16,7 @@ export const sharedStyleProps: React.CSSProperties = {
   width: '100%',
 
   fontWeight: 100,
-  letterSpacing: 2.5,
+  letterSpacing: 0.3,
   textTransform: 'uppercase',
 
   position: 'fixed',
@@ -39,8 +41,8 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
     }
   }
 
-  const headingTop = 5;
-  const headingSize = 4;
+  const headingTop = 7.27;
+  const headingSize = 4.66;
 
   const fadeOutClassName = isStarted || index ? 'fadeOut' : null;
   const className = ['greeting', fadeOutClassName].filter(Boolean).join(' ');
@@ -59,9 +61,9 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
           color: theme.lightElements,
           animationDelay: '0.2s',
           animationDuration: '0.25s',
-          fontSize: '1rem',
-          top: `${headingTop + headingSize + 2}rem`,
-          letterSpacing: 1,
+          fontSize: '1.56rem',
+          top: `${headingTop + headingSize + 1.62}rem`,
+          letterSpacing: -0.15,
 
           pointerEvents: 'none',
         }}
@@ -70,6 +72,7 @@ export function Greeting({ index, isStarted }: { index: number; isStarted: boole
       </div>
       <HowToPlay className={className} />
       <GreetingLinks className={className} />
+      <Settings className={className} />
     </>
   );
 }
@@ -119,10 +122,17 @@ function GreetingTitle({
 
 const isOnSubDomain = true;
 
+const isLocalhost = Boolean(
+  window.location.hostname === 'localhost' ||
+    // [::1] is the IPv6 localhost address.
+    window.location.hostname === '[::1]' ||
+    // 127.0.0.0/8 are considered localhost for IPv4.
+    window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/),
+);
+
 function GreetingLinks({ className }: { className: string }) {
   const { theme } = useTheme();
 
-  const repoUrl = useMemo(() => new URL(`https://github.com/${packageJson.repository}`), []);
   const authorUrl = useMemo(() => {
     if (!isOnSubDomain) return new URL(new URL(packageJson.homepage).origin);
 
@@ -135,7 +145,12 @@ function GreetingLinks({ className }: { className: string }) {
     return theUrl;
   }, []);
 
-  const repoDomainWithoutLevelOne = useMemo(() => getDomainWithoutLevel(repoUrl), [repoUrl]);
+  const repoDomainWithoutLevelOne = useMemo(() => getDomainWithoutLevel(repoUrl), []);
+
+  const openInNewTabProps: Pick<JSX.IntrinsicElements['a'], 'target' | 'rel'> = {
+    target: '_blank',
+    rel: 'noreferrer',
+  };
 
   return (
     <div
@@ -154,8 +169,11 @@ function GreetingLinks({ className }: { className: string }) {
         zIndex: 1,
       }}
     >
-      <a href={repoUrl.href}>{repoDomainWithoutLevelOne}</a> /{' '}
-      <a href={authorUrl.href} target="_blank" rel="noreferrer">
+      <a href={repoUrl.href} {...(isLocalhost ? openInNewTabProps : undefined)}>
+        {repoDomainWithoutLevelOne}
+      </a>{' '}
+      /{' '}
+      <a href={authorUrl.href} {...openInNewTabProps}>
         {authorUrl.hostname}
       </a>
     </div>

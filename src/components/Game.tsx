@@ -26,7 +26,9 @@ import { Score } from './Score';
 import { ReactTile, TileProps } from './Tile';
 import { PreviousTile } from './types';
 import { useInitVisitInSession } from '../features/firstVisitInSession';
-import { ColorSystemTests } from './ColorSystemTests';
+import { useMinimumActionInterval } from '../hooks/useMinimumActionInterval';
+import originalGreetingImage from '../images/original_greeting.png';
+import { AllStatisticsProps } from './ThisGameStats/ThisGameStats';
 
 const gameConfig = {
   physics: {
@@ -43,22 +45,26 @@ const gameConfig = {
 export function Game({ autoplay }: { autoplay?: boolean }) {
   const { theme, setThemeName } = useTheme();
 
-  const { invertGravity, speedOfMovingTile, debugPhysics } = useControls({
-    invertGravity: false,
-    speedOfMovingTile: {
-      value: 157,
-      step: 1,
+  const { invertGravity, speedOfMovingTile, debugPhysics, displayOriginalGameImages } = useControls(
+    {
+      invertGravity: false,
+      speedOfMovingTile: {
+        /** So that the interval between perfect taps is 800ms, like in the original game. */
+        value: 160,
+        step: 1,
+      },
+      debugPhysics: {
+        label: 'Debug Physics',
+        value: false,
+      },
+      theme: {
+        value: theme.name,
+        onChange: setThemeName,
+        options: themes.map((themeEl) => themeEl.name),
+      },
+      displayOriginalGameImages: false,
     },
-    debugPhysics: {
-      label: 'Debug Physics',
-      value: false,
-    },
-    theme: {
-      value: theme.name,
-      onChange: setThemeName,
-      options: themes.map((themeEl) => themeEl.name),
-    },
-  });
+  );
 
   const {
     thisGameStats,
@@ -264,7 +270,11 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     resetThisGameStats();
   }
 
+  const { preventActionOrPrepareAndContinue } = useMinimumActionInterval(50);
+
   function act() {
+    if (preventActionOrPrepareAndContinue()) return;
+
     if (isEnded) {
       reset();
       return;
@@ -350,8 +360,42 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         {/* TODO think about pre-loading everything. In reality, I suppose, it just makes all the objects wait for each other to finish loading before starting the scene and rendering. This makes the BaseTile look like it does not flash on load, but adds a significant amount of time to the first appearance of all of the Canvas. */}
         {/* <Preload all /> */}
       </Canvas>
-      <Greeting index={index} isStarted={isStarted} />
-      <Score index={index} isEnded={isEnded} />
+      <UILayerMemoized
+        {...{
+          index,
+          isStarted,
+          isEnded,
+          isHighScoreNew,
+          displayOriginalGameImages,
+          thisGameStats,
+          globalStats,
+        }}
+      />
+    </div>
+  );
+}
+
+const UILayerMemoized = memo(UILayer);
+
+function UILayer({
+  index,
+  isStarted,
+  isEnded,
+  isHighScoreNew,
+  displayOriginalGameImages,
+  thisGameStats,
+  globalStats,
+}: {
+  index: number;
+  isStarted: boolean;
+  isEnded: boolean;
+  isHighScoreNew: boolean;
+  displayOriginalGameImages: boolean;
+} & AllStatisticsProps) {
+  return (
+    <>
+      <GreetingMemoized index={index} isStarted={isStarted} />
+      <ScoreMemoized index={index} isEnded={isEnded} />
       <GameEndingMemoized
         isStarted={isStarted}
         isEnded={isEnded}
@@ -359,11 +403,24 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
         thisGameStats={thisGameStats}
         globalStats={globalStats}
       />
-      <ColorSystemTestsMemoized />
-    </div>
+      {displayOriginalGameImages && (
+        <img
+          src={originalGreetingImage}
+          alt="Original game greeting"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: 375,
+            opacity: 0.5,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
+    </>
   );
 }
 
+const GreetingMemoized = memo(Greeting);
+const ScoreMemoized = memo(Score);
 const GameEndingMemoized = memo(GameEnding);
-
-const ColorSystemTestsMemoized = memo(ColorSystemTests);
