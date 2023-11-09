@@ -39,6 +39,7 @@ export function CameraController({
   index: number;
 }) {
   const [destination, setDestination] = useState(new Vector3());
+  console.log(destination);
 
   useCameraZoomController({ isEnded, destination, index });
 

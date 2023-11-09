@@ -29,6 +29,7 @@ import { useInitVisitInSession } from '../features/firstVisitInSession';
 import { useMinimumActionInterval } from '../hooks/useMinimumActionInterval';
 import originalGreetingImage from '../images/original_greeting.png';
 import { AllStatisticsProps } from './ThisGameStats/ThisGameStats';
+import ThreeStars from './ThreeStars';
 
 const gameConfig = {
   physics: {
@@ -333,6 +334,7 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
             speedOfMovingTile={speedOfMovingTile}
           />
         )}
+        <ThreeStars />
         <Physics
           gravity={[
             0,
