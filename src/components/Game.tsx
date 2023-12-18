@@ -5,6 +5,7 @@ import { useControls } from 'leva';
 import { memo, useMemo, useRef, useState } from 'react';
 import { Box3, Mesh, Vector2, Vector3 } from 'three';
 import { useEventListener, useLocalStorage } from 'usehooks-ts';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 import { useTheme } from '../contexts/ThemeContext';
 import { ComboConfig, getNewSizeAndPositionOnComboStreak } from '../features/combos';
@@ -149,6 +150,8 @@ export function Game({ autoplay }: { autoplay?: boolean }) {
     const newSize = previousTile.size.clone();
     newSize.x -= absDiffX;
     newSize.y -= absDiffZ;
+
+    Haptics.impact({ style: ImpactStyle.Light });
 
     if (newSize.x < 0 || newSize.y < 0) {
       lose();

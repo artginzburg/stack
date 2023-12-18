@@ -6,6 +6,9 @@
   "repository": "artginzburg/stack",
   "homepage": "https://stack.ginzburg.art/",
   "dependencies": {
+    "@capacitor/core": "^5.6.0",
+    "@capacitor/haptics": "^5.0.6",
+    "@capacitor/ios": "^5.6.0",
     "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.92.4",
     "@react-three/fiber": "^8.15.12",
@@ -52,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/cli": "^5.6.0",
     "@types/three": "^0.148.0"
   }
 }
